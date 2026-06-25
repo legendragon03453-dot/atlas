@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atlas | Toda montanha precisa de um caminho</title>
+    <link rel="icon" type="image/webp" href="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        atlas: {
+                            blue: '#1C5E91',
+                            bg: '#FDF4E8',
+                            green: '#1E613E',
+                            red: '#B82B26',
+                            yellow: '#F2AB0C',
+                            dark: '#040C11',
+                            lightBlue: '#69A0C1',
+                            lightGreen: '#72B28F',
+                            beige: '#EFCA71',
+                            pink: '#D37976'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        @font-face {
+            font-family: 'Familjen Grotesk';
+            src: url('https://raw.githubusercontent.com/legendragon03453-dot/atlas/main/FamiljenGrotesk-VariableFont_wght.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Familjen Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #1C5E91; /* Cor de fundo base caso o vídeo falhe */
+        }
+
+        /* Estilos personalizados para os polígonos e gradientes */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+        }
+
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3; /* Atrás de tudo */
+        }
+
+        /* Overlay preto 15% */
+        .overlay-black {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.15);
+            z-index: -2;
+        }
+
+        /* Overlay Gradiente Azul (referenciando a imagem) */
+        .overlay-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%; /* Cobre a parte inferior */
+            background: linear-gradient(to top, #1C5E91 0%, rgba(28, 94, 145, 0) 100%);
+            z-index: -1;
+        }
+
+        /* Navbar com formato trapezoidal */
+        
+
+        @media (max-width: 1024px) {
+            .navbar-shape {
+                width: 90%;
+                padding: 0 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-shape {
+                width: 95%;
+                clip-path: none;
+                border-radius: 100px;
+                padding: 0 1.25rem;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                height: 58px;
+                top: 8px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .navbar-shape .btn-nav {
+                height: 36px;
+                padding: 0 1rem;
+                font-size: 12px;
+                clip-path: none;
+                border-radius: 100px;
+            }
+            .navbar-shape img {
+                height: 24px;
+            }
+            #mobile-menu-btn {
+                display: flex !important;
+                flex-shrink: 0;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                z-index: 50;
+            }
+        }
+
+        /* Estilos do Botão Hero */
+        .hero-cta {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 20px rgba(184, 43, 38, 0.4);
+        }
+
+        /* Estilos do Botão Cinza Claro na Navbar */
+        .btn-nav {
+            background-color: #E2E8F0;
+            color: #1A2E44;
+            transition: background-color 0.2s;
+            clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+            height: 44px;
+            padding: 0 1.8rem 0 1.2rem;
+        }
+        .btn-nav:hover {
+            background-color: #CBD5E1;
+        }
+
+        @keyframes text-gradient-loop {
+            to { background-position: 200% center; }
+        }
+
+        /* Destaque no Texto Animado */
+        .text-highlight {
+            background: linear-gradient(to right, #4B96FF, #AFFF00, #00d2ff, #4B96FF);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: text-gradient-loop 4s linear infinite;
+            text-shadow: 0px 2px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Sombra no texto principal para melhor legibilidade no vídeo */
+        .text-shadow-custom {
+            text-shadow: 0px 2px 15px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Avatares dos usuários */
+        .avatar-group {
+            display: flex;
+            align-items: center;
+        }
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: #ccc;
+            margin-left: -10px;
+        }
+        .avatar-circle:first-child {
+            margin-left: 0;
+            background-color: #555;
+        }
+        .avatar-circle:nth-child(2) {
+            background-color: #888;
+        }
+        .avatar-circle:nth-child(3) {
+            background-color: #eee;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes orbit-reverse {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        /* Seção 2 - Círculo */
+        .circle-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 2px solid #1c4b96; /* Azul escuro do contorno */
+            animation: orbit 45s linear infinite;
+        }
+        @media (min-width: 768px) {
+            .circle-container {
+                width: 450px;
+                height: 450px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .circle-container {
+                width: 600px;
+                height: 600px;
+            }
+        }
+        
+        .circle-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbit-reverse 45s linear infinite;
+        }
+        @media (min-width: 768px) {
+            .circle-dot {
+                width: 32px;
+                height: 32px;
+            }
+        }
+        
+        .center-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1rem;
+            text-align: center;
+            z-index: 10;
+            width: max-content;
+            max-width: 90%;
+        }
+        @media (min-width: 768px) {
+            .center-box {
+                padding: 1.5rem 2rem;
+            }
+        }
+    
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes glow-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .animate-glow-sweep {
+            animation: glow-sweep 8s linear infinite;
+        }
+        @keyframes needle-swing {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(70deg); }
+        }
+        .animate-needle {
+            animation: needle-swing 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes bg-scroll {
+            0% { background-position: 0% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Snowfall effect */
+        .snow-particle {
+            position: absolute;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) translateX(0px); }
+            100% { transform: translateY(100vh) translateX(20px); }
+        }
+
+        </style>
+
+</head>
+<body>
+    <!-- Navbar -->
+    <header id="main-header" class="fixed top-0 left-0 w-full flex justify-center z-50 transition-all duration-300 mt-4 px-3 md:px-0">
+    <nav class="w-full max-w-[1200px] flex justify-between items-center px-5 md:px-8 py-3 md:py-4 bg-black/60 backdrop-blur-xl border border-white/10 rounded-[40px] shadow-2xl">
+        <!-- Logo -->
+        <div class="flex-shrink-0 flex justify-start items-center">
+            <a href="/">
+                <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas Logo" class="h-8 md:h-10">
+            </a>
+        </div>
+
+        <!-- Links de Navegação -->
+        <div class="nav-links flex-1 hidden md:flex justify-center items-center gap-4 lg:gap-8 text-white font-medium text-[14px] lg:text-[16px] whitespace-nowrap px-4">
+            <a href="#section-7" class="hover:text-blue-200 transition-colors">Sobre</a>
+            <a href="#section-8" class="hover:text-blue-200 transition-colors">Preços</a>
+            <a href="funcionalidades.html" class="hover:text-blue-200 transition-colors">Funcionalidades</a>
+            <a href="#section-9" class="hover:text-blue-200 transition-colors">FAQ</a>
+            <a href="suporte.html" class="hover:text-blue-200 transition-colors">Suporte</a>
+        </div>
+
+        <!-- Botões da Direita -->
+        <div class="flex-shrink-0 flex justify-end items-center gap-3">
+            <a href="https://app.useatlasapp.com/auth" class="text-white font-medium text-[14px] lg:text-[16px] hover:text-blue-200 transition-colors hidden md:block">Entrar</a>
+            
+            <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-white/90 focus:outline-none cursor-pointer z-[100] relative">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+</header>
+
+    <!-- Hero Section -->
+    <section id="hero-section" class="relative w-full h-screen min-h-[600px] flex items-center overflow-hidden">
+        
+        <!-- Video de Fundo -->
+        <div class="absolute inset-0 w-full h-full z-0 overflow-hidden">
+            <!-- Camada preta esquerda -->
+            <div id="video-curtain-left" class="hidden md:block absolute top-0 left-0 w-1/2 h-full bg-black z-20 origin-left"></div>
+            <!-- Camada preta direita -->
+            <div id="video-curtain-right" class="hidden md:block absolute top-0 right-0 w-1/2 h-full bg-black z-20 origin-right"></div>
+            
+            <div class="absolute inset-0 bg-[#0F172A] opacity-20 z-10"></div>
+            <video id="hero-video" class="absolute inset-0 w-full h-full object-cover" autoplay muted playsinline>
+                <source src="https://github.com/legendragon03453-dot/atlas/raw/main/Figures_ascending_mountain_path_202606101920.webm" type="video/webm">
+            </video>
+            
+            <!-- Efeito de Neve / Poeira -->
+            <div id="snowfall-container" class="absolute inset-0 z-10 pointer-events-none"></div>
+
+            <!-- CSS Snow/Ice Particles -->
+            <div class="absolute inset-0 pointer-events-none overflow-hidden z-10">
+                <!-- Camada de trás -->
+                <div class="absolute w-2 h-2 bg-white/50 rounded-sm top-[-5%] left-[10%] [animation:snowfall_12s_linear_infinite_0s]"></div>
+                <div class="absolute w-1.5 h-1.5 bg-white/40 rounded-sm top-[-5%] left-[25%] [animation:snowfall_14s_linear_infinite_2s]"></div>
+                <div class="absolute w-2 h-2 bg-white/60 rounded-sm top-[-5%] left-[40%] [animation:snowfall_11s_linear_infinite_4s]"></div>
+                <div class="absolute w-1.5 h-1.5 bg-white/40 rounded-sm top-[-5%] left-[60%] [animation:snowfall_15s_linear_infinite_1s]"></div>
+                <div class="absolute w-2 h-2 bg-white/50 rounded-sm top-[-5%] left-[80%] [animation:snowfall_13s_linear_infinite_5s]"></div>
+                <div class="absolute w-1.5 h-1.5 bg-white/60 rounded-sm top-[-5%] left-[90%] [animation:snowfall_16s_linear_infinite_3s]"></div>
+                
+                <!-- Camada da frente -->
+                <div class="absolute w-3 h-3 bg-white/80 rounded top-[-5%] left-[15%] shadow-[0_0_10px_white] [animation:snowfall_8s_linear_infinite_6s]"></div>
+                <div class="absolute w-4 h-4 bg-white/70 rounded backdrop-blur-sm blur-[1px] top-[-5%] left-[35%] [animation:snowfall_10s_linear_infinite_8s]"></div>
+                <div class="absolute w-2.5 h-2.5 bg-white/90 rounded top-[-5%] left-[55%] shadow-[0_0_8px_white] [animation:snowfall_7s_linear_infinite_7s]"></div>
+                <div class="absolute w-5 h-5 bg-white/60 rounded-lg backdrop-blur-md blur-[2px] top-[-5%] left-[70%] [animation:snowfall_11s_linear_infinite_9s]"></div>
+                <div class="absolute w-3 h-3 bg-white/80 rounded top-[-5%] left-[85%] shadow-[0_0_12px_white] [animation:snowfall_9s_linear_infinite_10s]"></div>
+            </div>
+            
+            <!-- Efeito de Blur Inferior -->
+            <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-atlas-blue via-atlas-blue/80 to-transparent z-10 pointer-events-none"></div>
+        </div>
+
+        <!-- Hero Content (Fixed Center) -->
+        <div class="relative z-20 w-full px-4 flex flex-col items-center justify-center text-center mt-16 md:mt-0">
+            
+            <!-- Badge Superior -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-black/20 backdrop-blur-md border border-white/10 mb-8 transform hover:scale-105 transition-transform cursor-pointer">
+                <div class="flex -space-x-2">
+                    <img class="w-6 h-6 rounded-full border border-[#1a1a1a]" src="https://i.pravatar.cc/100?img=1" alt="User">
+                    <img class="w-6 h-6 rounded-full border border-[#1a1a1a]" src="https://i.pravatar.cc/100?img=2" alt="User">
+                    <img class="w-6 h-6 rounded-full border border-[#1a1a1a]" src="https://i.pravatar.cc/100?img=3" alt="User">
+                </div>
+<span class="text-white text-sm font-medium opacity-90">+100 Usuários</span>
+            </div>
+
+            
+        <!-- Título -->
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight text-shadow-custom tracking-tight  ">
+                Toda montanha precisa<br>
+                de um <span class="text-highlight">caminho</span>
+            </h1>
+
+            <!-- Subtítulo / Parágrafo -->
+            <p class="text-lg md:text-xl text-gray-100 mb-10 max-w-2xl font-medium text-shadow-custom leading-relaxed">
+                O Atlas não decide por você. Mostra onde você está, o próximo passo e o que muda se escolher um caminho diferente.
+            </p>
+
+            <!-- Botão Principal -->
+            <a href="#section-8" class="bg-atlas-red text-white hover:bg-atlas-red/90 shadow-lg hero-cta py-4 px-8 md:px-24 md:py-7 rounded-full font-black text-2xl md:text-5xl inline-flex items-center justify-center gap-4 md:gap-5 w-auto uppercase tracking-wide">
+                <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas" class="h-5 md:h-6 filter brightness-0 invert opacity-90 mt-[2px] md:mt-1"> <!-- Pequeno quadrado preto icônico do botão na referência -->
+                Assinar Atlas
+            </a>
+            
+        
+    
+
+        </div>
+
+    </section>
+
+    <!-- Wrapper das Sessões 2 e 3 para a animação GSAP -->
+    
+    <!-- S2 Mobile Version (No GSAP) -->
+    <section id="s2-mobile" class="md:hidden w-full bg-atlas-blue flex flex-col items-center pt-8 pb-4 relative z-20">
+
+
+        
+            <div class="md:hidden grid grid-cols-2 gap-3 w-[90%] max-w-sm mt-8 pb-10">
+                <!-- Mãe -->
+                <div class="col-span-2 bg-[#0B1A30]/80 backdrop-blur-md border border-atlas-blue p-5 rounded-xl text-center shadow-[0_0_15px_rgba(54,124,245,0.4)]">
+                    <p class="text-white text-sm font-bold">Você não precisa ganhar mais.<br>Você precisa enxergar melhor.</p>
+                </div>
+                <!-- Filhas -->
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Não tem noção do futuro</p>
+                </div>
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Vê o dinheiro entrar, mas não sobra</p>
+                </div>
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Quer guardar, mas não sabe como</p>
+                </div>
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Consome conteúdo, mas não age</p>
+                </div>
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Suas finanças estão espalhadas</p>
+                </div>
+                <div class="bg-white border border-gray-200 p-3 rounded-lg flex items-center justify-center text-center shadow-md">
+                    <p class="text-atlas-blue md:text-white/90 text-xs font-medium leading-tight">Tem medo de investir errado</p>
+                </div>
+            </div>
+
+        
+    </section>
+
+    <div id="pin-master" class="w-full bg-atlas-blue relative">
+        
+        <!-- S3 Content (Define a altura do wrapper, fica invisível até a animação terminar) -->
+        <div id="s3-content" class="w-full flex flex-col items-center pt-16 md:pt-32 z-20 pb-0 md:pb-16 md:opacity-0">
+            <!-- Header -->
+            <h2 class="text-white text-2xl md:text-4xl font-bold mb-8 text-center px-4 drop-shadow-lg ">
+                Não é mais um app de controle.<br>É um mapa do seu futuro.
+            </h2>
+
+            <!-- Cards e Macbook -->
+            <div class="relative w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center z-20">
+                <div class="order-1 lg:order-none lg:absolute lg:left-4 xl:left-12 top-[15%] p-5 border border-white/30 rounded-lg w-[90%] max-w-[320px] lg:max-w-[280px] text-left mb-4 lg:mb-0 bg-atlas-blue/80 backdrop-blur-md shadow-xl z-30">
+                    <h3 class="text-white text-base font-bold mb-2 leading-tight">Veja para onde vai,<br>não para onde foi</h3>
+                    <p class="text-white/90 text-[13px] leading-relaxed font-light">
+                        Enquanto outros apps mostram transações do passado, o Atlas registra o presente com propósito. Cada gasto é uma decisão. Cada categoria, um reflexo do que você valoriza. Não é sobre culpa é sobre clareza
+                    </p>
+                </div>
+
+                <img src="https://github.com/legendragon03453-dot/atlas/blob/main/MAC%201.webp?raw=true" alt="Macbook Dashboard" class="w-full max-w-3xl relative z-10 px-4 order-3 lg:order-none mt-4 lg:mt-0">
+
+                <div class="order-2 lg:order-none lg:absolute lg:right-4 xl:right-12 top-[15%] p-5 border border-white/30 rounded-lg w-[90%] max-w-[320px] lg:max-w-[280px] text-left mt-0 lg:mt-0 bg-atlas-blue/80 backdrop-blur-md shadow-xl z-30">
+                    <h3 class="text-white text-base font-bold mb-2 leading-tight">Veja o que muda se você<br>escolher outro caminho</h3>
+                    <p class="text-white/90 text-[13px] leading-relaxed font-light">
+                        Decisões financeiras são sobre trade-offs. Se guardar R$ 500/mês em vez de R$ 300, sua aposentadoria muda em 15 anos. O Atlas mostra isso. Não em teoria em números reais, seus números
+                    </p>
+                </div>
+            </div>
+
+            <!-- Base de neve imagem -->
+            <div class="w-full relative -mt-8 sm:-mt-16 md:-mt-32 lg:-mt-48 xl:-mt-64 z-0 pointer-events-none">
+                <img src="https://github.com/legendragon03453-dot/atlas/blob/main/BASE%20NOVA.webp?raw=true" alt="Base de neve" class="w-full h-auto object-cover min-h-[150px]">
+            </div>
+        </div>
+
+        <!-- S2 Content (Fixado no topo da tela) -->
+        <div id="s2-container" class="hidden md:flex absolute top-0 left-0 w-full h-screen items-center justify-center z-30">
+            <div class="center-box hidden md:block">
+                <p class="text-white text-[15px] md:text-xl lg:text-2xl font-medium leading-snug">
+                    Você não precisa ganhar mais.<br>
+                    Você precisa enxergar melhor.
+                </p>
+            </div>
+            
+            <div class="circle-container hidden md:block">
+                <div class="circle-dot" style="top: 14.65%; left: 14.65%;">
+                    <div class="absolute right-full mr-3 md:mr-6 top-1/2 -translate-y-1/2 w-24 sm:w-28 md:w-48 text-right text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Não tem noção do futuro
+                    </div>
+                </div>
+                <div class="circle-dot" style="top: 50%; left: 0%;">
+                    <div class="absolute right-full mr-3 md:mr-6 top-1/2 -translate-y-1/2 w-24 sm:w-32 md:w-56 text-right text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Vê o dinheiro entrar, mas no fim do mês não sobra
+                    </div>
+                </div>
+                <div class="circle-dot" style="top: 85.35%; left: 14.65%;">
+                    <div class="absolute right-full mr-3 md:mr-6 top-1/2 -translate-y-1/2 w-24 sm:w-32 md:w-56 text-right text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Quer guardar para objetivos, mas não sabe por onde começar
+                    </div>
+                </div>
+                <div class="circle-dot" style="top: 14.65%; left: 85.35%;">
+                    <div class="absolute left-full ml-3 md:ml-6 top-1/2 -translate-y-1/2 w-32 md:w-48 text-left text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Consome conteúdo financeiro, mas não age
+                    </div>
+                </div>
+                <div class="circle-dot" style="top: 50%; left: 100%;">
+                    <div class="absolute left-full ml-3 md:ml-6 top-1/2 -translate-y-1/2 w-24 sm:w-32 md:w-56 text-left text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Vê o dinheiro entrar, mas no fim do mês não sobra
+                    </div>
+                </div>
+                <div class="circle-dot" style="top: 85.35%; left: 85.35%;">
+                    <div class="absolute left-full ml-3 md:ml-6 top-1/2 -translate-y-1/2 w-24 sm:w-28 md:w-48 text-left text-white text-[10px] sm:text-[12px] md:text-sm lg:text-base font-medium">
+                        Suas finanças estão espalhadas
+                    </div>
+                </div>
+            </div>
+        </div><!-- Bola Branca de Transição -->
+        <div id="snowball" class="absolute top-[50vh] left-[50%] w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[450px] md:h-[450px] lg:w-[600px] lg:h-[600px] bg-white rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 z-40"></div>
+    </div>
+
+    <!-- === SEÇÃO 3 BOTTOM (Área Branca inferior) === -->
+    <section id="s3-bottom" class="w-full bg-atlas-bg flex flex-col items-center pb-12 md:pb-32 z-30 relative -mt-12 md:-mt-16 lg:-mt-24">
+        <div class="bg-[#f0f2f5] p-8 md:p-12 rounded-2xl max-w-3xl w-[90%] mx-auto text-center relative z-10 shadow-sm -mt-16 md:-mt-16 lg:-mt-24">
+            <h3 class="text-atlas-blue text-xl md:text-2xl font-bold mb-4">Aprenda enquanto planeja</h3>
+            <p class="text-gray-600 text-sm md:text-base leading-relaxed font-medium">
+                Não é um blog. Não é um podcast. É educação integrada ao seu plano. Quando você vê seu futuro, entende por que economizar importa. Quando entende, age.
+            </p>
+        </div>
+
+        <a href="#section-8" class="bg-atlas-red text-white hover:bg-atlas-red/90 shadow-lg hero-cta py-6 md:px-24 md:py-7 rounded-full font-bold text-3xl md:text-4xl flex items-center justify-center gap-3 mt-12 relative z-10 w-[90%] sm:w-auto transition-transform hover:-translate-y-1 shadow-2xl">
+            <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas" class="h-5 md:h-6 filter brightness-0 invert opacity-90 mt-[2px] md:mt-1">
+            Assinar Atlas
+        </a>
+    </section>
+
+    
+    <!-- === SEÇÃO 4: Timeline === -->
+    <section id="section-4" class="w-full bg-atlas-blue flex flex-col items-center pt-16 md:pt-24 pb-20 md:pb-32 relative overflow-hidden lg:mt-0">
+        
+        <!-- Título -->
+        <h2 class="text-2xl md:text-4xl lg:text-5xl mb-4 md:mb-16 mt-20 md:mt-0 text-center px-4 max-w-4xl leading-tight drop-shadow-lg tracking-tight">
+            <span class="font-normal text-white/95">Você não sai do caos para a maestria de uma noite.</span><br>
+            <span class="font-bold text-white mt-2 inline-block">Você sobe uma montanha, <span class="text-white font-normal italic font-playfair">passo a passo.</span></span>
+        </h2>
+
+        <!-- Timeline Mobile (Vertical) -->
+        <div class="md:hidden flex flex-col w-[90%] mx-auto mt-6 relative z-20">
+            <!-- Linha vertical -->
+            <div class="absolute left-5 top-4 bottom-4 w-0.5 bg-white/20"></div>
+
+            <!-- Passo 1 -->
+            <div class="mobile-timeline-item flex items-start gap-4 pb-8 opacity-0 translate-y-8 transition-all duration-700">
+                <div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-white/20 border-2 border-white flex items-center justify-center shadow-[0_0_14px_rgba(255,255,255,0.5)] z-10">
+                    <span class="text-white font-black text-sm">1</span>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex-1 shadow-md">
+                    <h3 class="text-atlas-blue font-bold text-base mb-1 leading-snug">Você vê o que aconteceu.</h3>
+                    <p class="text-gray-600 md:text-white/75 text-sm leading-relaxed">Registra o mês, vê onde o dinheiro foi. Começa a entender o padrão.</p>
+                </div>
+            </div>
+
+            <!-- Passo 2 -->
+            <div class="mobile-timeline-item flex items-start gap-4 pb-8 opacity-0 translate-y-8 transition-all duration-700 delay-100">
+                <div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-white/20 border-2 border-white flex items-center justify-center shadow-[0_0_14px_rgba(255,255,255,0.5)] z-10">
+                    <span class="text-white font-black text-sm">2</span>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex-1 shadow-md">
+                    <h3 class="text-atlas-blue font-bold text-base mb-1 leading-snug">Você categoriza.</h3>
+                    <p class="text-gray-600 md:text-white/75 text-sm leading-relaxed">Cada categoria revela um valor. Você alinha gastos com o que importa.</p>
+                </div>
+            </div>
+
+            <!-- Passo 3 -->
+            <div class="mobile-timeline-item flex items-start gap-4 pb-8 opacity-0 translate-y-8 transition-all duration-700 delay-200">
+                <div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-white/20 border-2 border-white flex items-center justify-center shadow-[0_0_14px_rgba(255,255,255,0.5)] z-10">
+                    <span class="text-white font-black text-sm">3</span>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex-1 shadow-md">
+                    <h3 class="text-atlas-blue font-bold text-base mb-1 leading-snug">Você projeta o futuro.</h3>
+                    <p class="text-gray-600 md:text-white/75 text-sm leading-relaxed">Sai do presente, entra no futuro. Vê a aposentadoria como meta tangível.</p>
+                </div>
+            </div>
+
+            <!-- Passo 4 -->
+            <div class="mobile-timeline-item flex items-start gap-4 pb-8 opacity-0 translate-y-8 transition-all duration-700 delay-300">
+                <div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-white/20 border-2 border-white flex items-center justify-center shadow-[0_0_14px_rgba(255,255,255,0.5)] z-10">
+                    <span class="text-white font-black text-sm">4</span>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-2xl px-5 py-4 flex-1 shadow-md">
+                    <h3 class="text-atlas-blue font-bold text-base mb-1 leading-snug">Você decide com dados.</h3>
+                    <p class="text-gray-600 md:text-white/75 text-sm leading-relaxed">Não mais por emoção. Vê o impacto de R$ 100 a mais em 10, 20, 30 anos.</p>
+                </div>
+            </div>
+
+            <!-- Passo 5 -->
+            <div class="mobile-timeline-item flex items-start gap-4 pb-0 opacity-0 translate-y-8 transition-all duration-700 delay-500">
+                <div class="relative flex-shrink-0 w-10 h-10 rounded-full bg-[#AFFF00] border-2 border-[#AFFF00] flex items-center justify-center shadow-[0_0_14px_rgba(175,255,0,0.6)] z-10">
+                    <svg class="w-5 h-5 text-[#1A2E05]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="bg-[#AFFF00]/10 border border-[#AFFF00]/40 rounded-2xl px-5 py-4 flex-1 backdrop-blur-sm">
+                    <h3 class="text-[#AFFF00] font-bold text-base mb-1 leading-snug">Você vê a vida inteira.</h3>
+                    <p class="text-white/90 md:text-white/75 text-sm leading-relaxed">Pensa em décadas. Sua vida financeira tem começo, meio e fim claro.</p>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- Container da Timeline -->
+        <div class="relative w-full max-w-5xl h-[900px] md:h-[1200px] lg:h-[1600px] mx-auto mt-10 hidden md:block">
+            <!-- SVG Background -->
+            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1000 1600" preserveAspectRatio="none">
+                <!-- Linha fina transparente de fundo -->
+                <path d="M 500 0 C 500 100, 350 100, 350 200 C 350 350, 750 350, 750 500 C 750 650, 250 650, 250 800 C 250 950, 700 950, 700 1100 C 700 1250, 450 1250, 450 1400 C 450 1500, 500 1500, 500 1600" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3" />
+                <!-- Linha animada branca sólida -->
+                <path id="timeline-path" d="M 500 0 C 500 100, 350 100, 350 200 C 350 350, 750 350, 750 500 C 750 650, 250 650, 250 800 C 250 950, 700 950, 700 1100 C 700 1250, 450 1250, 450 1400 C 450 1500, 500 1500, 500 1600" fill="none" stroke="white" stroke-width="5" />
+            </svg>
+
+            <!-- Os pontos da timeline -->
+            <!-- Passo 1 (X: 35%) -->
+            <div class="absolute w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20" style="top: 12.5%; left: 35%;">
+                <div class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+15px)] md:left-auto md:right-[calc(100%+20px)] w-[180px] sm:w-[220px] md:w-[320px] text-left md:text-left">
+                    <h3 class="text-white font-bold text-[16px] md:text-xl mb-2 leading-tight">Você vê o que aconteceu.<br>Começa a entender o padrão.</h3>
+                    <p class="text-white/80 text-[13px] md:text-sm leading-relaxed">Seus primeiros passos. Você registra o mês, vê onde o dinheiro foi.</p>
+                </div>
+            </div>
+
+            <!-- Passo 2 (X: 75%) -->
+            <div class="absolute w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20" style="top: 31.25%; left: 75%;">
+                <div class="absolute top-1/2 -translate-y-1/2 right-[calc(100%+15px)] md:right-auto md:left-[calc(100%+20px)] w-[180px] sm:w-[220px] md:w-[320px] text-left md:text-left">
+                    <h3 class="text-white font-bold text-[16px] md:text-xl mb-2 leading-tight">Você registra e categoriza.<br>Começa a ter clareza.</h3>
+                    <p class="text-white/80 text-[13px] md:text-sm leading-relaxed">Cada categoria revela um valor seu. Alimentação, educação, lazer. Você não corta gastos. Você alinha gastos com o que importa.</p>
+                </div>
+            </div>
+
+            <!-- Passo 3 (X: 25%) -->
+            <div class="absolute w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20" style="top: 50%; left: 25%;">
+                <div class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+15px)] md:left-auto md:right-[calc(100%+20px)] w-[180px] sm:w-[220px] md:w-[320px] text-left md:text-left">
+                    <h3 class="text-white font-bold text-[16px] md:text-xl mb-2 leading-tight">Você projeta o futuro.<br>Começa a ter controle.</h3>
+                    <p class="text-white/80 text-[13px] md:text-sm leading-relaxed">Você sai do presente e entra no futuro. Vê sua aposentadoria não como abstração, mas como meta</p>
+                </div>
+            </div>
+
+            <!-- Passo 4 (X: 70%) -->
+            <div class="absolute w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20" style="top: 68.75%; left: 70%;">
+                <div class="absolute top-1/2 -translate-y-1/2 right-[calc(100%+15px)] w-[180px] sm:w-[220px] md:w-[320px] text-left">
+                    <h3 class="text-white font-bold text-[16px] md:text-xl mb-2 leading-tight">Você decide com dados.<br>Começa a construir riqueza.</h3>
+                    <p class="text-white/80 text-[13px] md:text-sm leading-relaxed">Agora você não decide por emoção. Você vê o impacto de cada escolha. Aumentar a reserva em R$ 100? Vê o resultado em 10, 20, 30 anos.</p>
+                </div>
+            </div>
+
+            <!-- Passo 5 (X: 45%) -->
+            <div class="absolute w-5 h-5 md:w-6 md:h-6 rounded-full bg-white transform -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_rgba(255,255,255,0.8)] z-20" style="top: 87.5%; left: 45%;">
+                <div class="absolute top-1/2 -translate-y-1/2 left-[calc(100%+15px)] md:left-auto md:right-[calc(100%+20px)] w-[160px] sm:w-[220px] md:w-[320px] text-left md:text-left">
+                    <h3 class="text-white font-bold text-[16px] md:text-xl mb-2 leading-tight">Você vê a vida inteira.<br>Começa a viver com propósito</h3>
+                    <p class="text-white/80 text-[13px] md:text-sm leading-relaxed">Você não pensa em meses. Você pensa em décadas. Sua vida financeira é uma história com começo, meio e fim claro.</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="#section-8" class="bg-atlas-red text-white hover:bg-atlas-red/90 shadow-lg hero-cta py-6 md:px-24 md:py-7 rounded-full font-bold text-3xl md:text-4xl flex items-center justify-center gap-3 mt-10 md:mt-24 relative z-10 w-[90%] sm:w-auto transition-transform hover:-translate-y-1 shadow-2xl">
+            <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas" class="h-5 md:h-6 filter brightness-0 invert opacity-90 mt-[2px] md:mt-1">
+            Assinar Atlas
+        </a>
+    </section>
+
+    
+        <!-- === SEÇÃO 5: Tabela de Comparação === -->
+    <style>
+        .card-3d-reveal {
+            opacity: 0.3;
+            filter: blur(8px);
+            transform: perspective(1200px) rotateX(10deg) translateY(50px) scale(0.9);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card-3d-wrapper.active .card-3d-reveal {
+            opacity: 1;
+            filter: blur(0px);
+            transform: perspective(1200px) rotateX(0deg) translateY(0) scale(1);
+        }
+    </style>
+    <section id="section-5" class="w-full bg-atlas-blue min-h-0 md:min-h-[200vh] px-4 relative flex flex-col items-center">
+        <!-- Glow Overlay -->
+        <div class="absolute inset-0 pointer-events-none overflow-hidden z-0">
+            <div class="absolute top-0 left-0 w-[60%] h-full bg-[#36DCF5]/60 blur-[150px] rounded-full animate-glow-sweep mix-blend-screen"></div>
+        </div>
+
+        <!-- Sticky Heading -->
+        <div class="md:sticky md:top-0 w-full md:h-[100vh] flex flex-col items-center justify-center z-0 pointer-events-none py-16 md:py-0">
+            <h2 class="text-white text-3xl md:text-5xl lg:text-6xl font-bold text-center max-w-5xl leading-tight drop-shadow-2xl tracking-tight px-4 md:pb-[15vh] mb-8 md:mb-0">
+                O que acontece quando você compra o Atlas ou <span class="font-normal italic font-playfair text-atlas-dark">Não compra o atlas</span>
+            </h2>
+        </div>
+
+        <!-- Cards container (Restored overlap margin) -->
+        <div class="w-full max-w-5xl mx-auto flex flex-col gap-8 md:gap-12 relative z-10 md:mt-[-70vh] pb-16 md:pb-[30vh]">
+
+            <!-- Card -->
+            <div class="card-3d-reveal rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-white/20 bg-white border-gray-200 shadow-lg">
+                <!-- Left -->
+                <div class="md:w-1/3 p-6 md:p-8 bg-white flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <i data-lucide="rocket" class="w-8 h-8 md:w-6 md:h-6 text-atlas-blue md:text-white shrink-0 mb-1 md:mb-0"></i>
+                    <h3 class="text-gray-900 font-bold text-lg md:text-xl text-center md:text-left">O seu futuro</h3>
+                </div>
+                <!-- Middle & Right -->
+                <div class="flex-1 flex flex-col sm:flex-row">
+                    <!-- Sem Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <span class="text-rose-500 font-bold text-[10px] tracking-wider uppercase">Sem Atlas</span>
+                        </div>
+                        <p class="text-zinc-600 font-medium text-sm md:text-base leading-snug">Parece longe e irreal</p>
+                    </div>
+                    <!-- Com Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#36DCF5]"></div>
+                            <span class="text-atlas-blue font-bold text-[10px] tracking-wider uppercase">Com Atlas</span>
+                        </div>
+                        <p class="text-atlas-dark font-bold text-sm md:text-base leading-snug">Tem data, meta e valor exato</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card-3d-reveal rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-white/20 bg-white border-gray-200 shadow-lg">
+                <!-- Left -->
+                <div class="md:w-1/3 p-6 md:p-8 bg-white flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <i data-lucide="shopping-cart" class="w-8 h-8 md:w-6 md:h-6 text-atlas-blue md:text-white shrink-0 mb-1 md:mb-0"></i>
+                    <h3 class="text-gray-900 font-bold text-lg md:text-xl text-center md:text-left">Decisões de compra</h3>
+                </div>
+                <!-- Middle & Right -->
+                <div class="flex-1 flex flex-col sm:flex-row">
+                    <!-- Sem Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <span class="text-rose-500 font-bold text-[10px] tracking-wider uppercase">Sem Atlas</span>
+                        </div>
+                        <p class="text-zinc-600 font-medium text-sm md:text-base leading-snug">Feitas no impulso ou emoção</p>
+                    </div>
+                    <!-- Com Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#36DCF5]"></div>
+                            <span class="text-atlas-blue font-bold text-[10px] tracking-wider uppercase">Com Atlas</span>
+                        </div>
+                        <p class="text-atlas-dark font-bold text-sm md:text-base leading-snug">Baseadas em números e realidade</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card-3d-reveal rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-white/20 bg-white border-gray-200 shadow-lg">
+                <!-- Left -->
+                <div class="md:w-1/3 p-6 md:p-8 bg-white flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <i data-lucide="calculator" class="w-8 h-8 md:w-6 md:h-6 text-atlas-blue md:text-white shrink-0 mb-1 md:mb-0"></i>
+                    <h3 class="text-gray-900 font-bold text-lg md:text-xl text-center md:text-left">Controle de gastos</h3>
+                </div>
+                <!-- Middle & Right -->
+                <div class="flex-1 flex flex-col sm:flex-row">
+                    <!-- Sem Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <span class="text-rose-500 font-bold text-[10px] tracking-wider uppercase">Sem Atlas</span>
+                        </div>
+                        <p class="text-zinc-600 font-medium text-sm md:text-base leading-snug">Anota por anotar, sem focar</p>
+                    </div>
+                    <!-- Com Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#36DCF5]"></div>
+                            <span class="text-atlas-blue font-bold text-[10px] tracking-wider uppercase">Com Atlas</span>
+                        </div>
+                        <p class="text-atlas-dark font-bold text-sm md:text-base leading-snug">Gasta sem culpa no que te faz feliz</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card-3d-reveal rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-white/20 bg-white border-gray-200 shadow-lg">
+                <!-- Left -->
+                <div class="md:w-1/3 p-6 md:p-8 bg-white flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <i data-lucide="book-open" class="w-8 h-8 md:w-6 md:h-6 text-atlas-blue md:text-white shrink-0 mb-1 md:mb-0"></i>
+                    <h3 class="text-gray-900 font-bold text-lg md:text-xl text-center md:text-left">Aprender sobre dinheiro</h3>
+                </div>
+                <!-- Middle & Right -->
+                <div class="flex-1 flex flex-col sm:flex-row">
+                    <!-- Sem Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <span class="text-rose-500 font-bold text-[10px] tracking-wider uppercase">Sem Atlas</span>
+                        </div>
+                        <p class="text-zinc-600 font-medium text-sm md:text-base leading-snug">Lê dicas, mas nunca aplica</p>
+                    </div>
+                    <!-- Com Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#36DCF5]"></div>
+                            <span class="text-atlas-blue font-bold text-[10px] tracking-wider uppercase">Com Atlas</span>
+                        </div>
+                        <p class="text-atlas-dark font-bold text-sm md:text-base leading-snug">Aprende na prática, no seu plano</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card -->
+            <div class="card-3d-reveal rounded-2xl overflow-hidden shadow-2xl flex flex-col md:flex-row transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl border border-white/20 bg-white border-gray-200 shadow-lg">
+                <!-- Left -->
+                <div class="md:w-1/3 p-6 md:p-8 bg-white flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-4">
+                    <i data-lucide="eye" class="w-8 h-8 md:w-6 md:h-6 text-atlas-blue md:text-white shrink-0 mb-1 md:mb-0"></i>
+                    <h3 class="text-gray-900 font-bold text-lg md:text-xl text-center md:text-left">Visão do dinheiro</h3>
+                </div>
+                <!-- Middle & Right -->
+                <div class="flex-1 flex flex-col sm:flex-row">
+                    <!-- Sem Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-rose-500"></div>
+                            <span class="text-rose-500 font-bold text-[10px] tracking-wider uppercase">Sem Atlas</span>
+                        </div>
+                        <p class="text-zinc-600 font-medium text-sm md:text-base leading-snug">Olha só para o que já gastou</p>
+                    </div>
+                    <!-- Com Atlas -->
+                    <div class="flex-1 p-6 md:p-8 bg-white flex flex-col justify-center items-center md:items-start text-center md:text-left border-t md:border-t-0 border-l-0 md:border-l border-gray-100">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-1.5 h-1.5 rounded-full bg-[#36DCF5]"></div>
+                            <span class="text-atlas-blue font-bold text-[10px] tracking-wider uppercase">Com Atlas</span>
+                        </div>
+                        <p class="text-atlas-dark font-bold text-sm md:text-base leading-snug">Sabe exatamente o que vai gastar</p>
+                    </div>
+                </div>
+                </div> <!-- Fechamento do overflow-x-auto -->
+                
+                <div class="mt-12 flex justify-center w-full">
+                    <a href="funcionalidades.html" class="inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-atlas-blue text-atlas-blue font-bold text-lg rounded-xl hover:bg-atlas-lightBlue/10 transition-colors shadow-sm hover:shadow-md">
+                        Ver lista completa de funcionalidades
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Script IntersectionObserver para os cards 3D -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if ('IntersectionObserver' in window) {
+                const observer3d = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('active');
+                        } else {
+                            entry.target.classList.remove('active');
+                        }
+                    });
+                }, { threshold: 0.2, rootMargin: "-10% 0px -10% 0px" });
+
+                document.querySelectorAll('.card-3d-reveal').forEach(el => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'card-3d-wrapper w-full';
+                    el.parentNode.insertBefore(wrapper, el);
+                    wrapper.appendChild(el);
+                    observer3d.observe(wrapper);
+                });
+            }
+        });
+    </script>
+
+    <!-- === SEÇÃO 6: Features Bento Grid === -->
+    <section id="section-6" class="w-full bg-atlas-bg py-10 md:py-32 px-4 flex flex-col items-center border-t border-zinc-200">
+        
+        <!-- Header -->
+        <div class="text-center mb-16 flex flex-col items-center max-w-3xl mx-auto">
+            <div class="flex items-center gap-2 mb-6">
+                <div class="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                <span class="text-xs font-semibold tracking-widest text-zinc-500 uppercase">O que vem nos 7 dias</span>
+            </div>
+            <h2 class="text-atlas-dark text-3xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight  ">
+                Atlas inteiro, aberto, <span class="font-normal italic font-playfair">na sua mão.</span>
+            </h2>
+            <p class="text-zinc-600 text-lg md:text-xl font-medium">
+                12 ferramentas que viram um sistema único. Não você adivinhando, você decidindo.
+            </p>
+        </div>
+
+                        <!-- Bento Grid -->
+        <div class="mx-auto w-full max-w-6xl">
+            <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                
+                <!-- 1. Atlas Score (Restored) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Atlas Score</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">Em 2 segundos você sabe onde está. Score que se atualiza com cada decisão.</p>
+                    </div>
+                    <!-- UI Score Mockup -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-center justify-center p-6 mt-4">
+                        <div class="bg-white rounded-2xl shadow-md border border-zinc-100 p-5 w-full max-w-[220px] flex flex-col items-center relative transform -rotate-2 group-hover:rotate-0 transition-transform duration-500">
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mb-3">Atlas Score Atual</span>
+                            <div class="relative w-24 h-24 mb-3 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-zinc-100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5"></path>
+                                    <path class="text-atlas-blue" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" class="animate-[dash_2s_ease-out_forwards]"></path>
+                                </svg>
+                                <div class="absolute flex flex-col items-center">
+                                    <span class="text-3xl font-extrabold text-atlas-dark tracking-tighter">850</span>
+                                    <span class="text-[9px] font-bold text-atlas-green bg-atlas-lightGreen/30 px-1.5 py-0.5 rounded-full -mt-1">+25 pts</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-gradient-to-r from-blue-50 to-blue-100 text-atlas-blue text-[10px] font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 border border-atlas-lightBlue/30">
+                                Perfil: Mestre
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Método Atlas (New) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Método Atlas</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">5 relatórios. Os mesmos diagnósticos que uso com clientes da Zephyr.</p>
+                    </div>
+                    <!-- Mockup: 5 stacked reports sliding up -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-end justify-center px-6 mt-4 perspective-[1000px]">
+                        <div class="relative w-full max-w-[180px] h-32 transform-style-3d group-hover:rotate-x-12 transition-transform duration-500">
+                            <div class="absolute bottom-0 w-full h-24 bg-white border border-zinc-200 rounded-t-xl shadow-md translate-y-4 group-hover:-translate-y-0 transition-transform duration-500 flex flex-col p-3 z-50">
+                                <div class="w-8 h-1 bg-zinc-200 rounded mb-2"></div>
+                                <div class="w-full h-1.5 bg-atlas-lightBlue/20 rounded mb-1.5"></div>
+                                <div class="w-2/3 h-1.5 bg-atlas-lightBlue/20 rounded"></div>
+                            </div>
+                            <div class="absolute bottom-3 w-full h-24 bg-white/90 border border-zinc-200 rounded-t-xl shadow-sm scale-95 translate-y-4 group-hover:-translate-y-2 transition-transform duration-500 delay-75 z-40"></div>
+                            <div class="absolute bottom-6 w-full h-24 bg-white/80 border border-zinc-200 rounded-t-xl shadow-sm scale-90 translate-y-4 group-hover:-translate-y-4 transition-transform duration-500 delay-100 z-30"></div>
+                            <div class="absolute bottom-9 w-full h-24 bg-white/70 border border-zinc-200 rounded-t-xl shadow-sm scale-85 translate-y-4 group-hover:-translate-y-6 transition-transform duration-500 delay-150 z-20"></div>
+                            <div class="absolute bottom-12 w-full h-24 bg-white/60 border border-zinc-200 rounded-t-xl shadow-sm scale-80 translate-y-4 group-hover:-translate-y-8 transition-transform duration-500 delay-200 z-10"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Vista da Montanha (Restored) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Vista da Montanha</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">Veja seu futuro financeiro mudar em tempo real. Cenários, não promessa.</p>
+                    </div>
+                    <!-- UI Dashboard Mockup -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden pt-4 px-6 mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex flex-col">
+                                <span class="text-[8px] text-zinc-500 font-bold uppercase tracking-widest">Patrimônio Projetado</span>
+                                <span class="text-lg font-extrabold text-atlas-dark font-playfair tracking-tight">R$ 1.25M</span>
+                            </div>
+                        </div>
+                        <div class="relative h-24 w-full flex items-end gap-1.5 px-2 pb-1 border-b border-zinc-200 z-10">
+                            <div class="w-1/6 bg-atlas-lightBlue/20 h-[20%] rounded-t relative group-hover:bg-blue-200 transition-colors"></div>
+                            <div class="w-1/6 bg-blue-200 h-[35%] rounded-t group-hover:bg-blue-300 transition-colors delay-75"></div>
+                            <div class="w-1/6 bg-blue-300 h-[50%] rounded-t group-hover:bg-blue-400 transition-colors delay-100"></div>
+                            <div class="w-1/6 bg-blue-400 h-[65%] rounded-t relative group-hover:-translate-y-1 transition-transform">
+                                <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-white border-[2px] border-atlas-blue rounded-full shadow-md z-20"></div>
+                            </div>
+                            <div class="w-1/6 bg-atlas-lightBlue/100 h-[80%] rounded-t"></div>
+                            <div class="w-1/6 bg-atlas-blue h-[100%] rounded-t relative shadow-[0_0_10px_rgba(37,99,235,0.3)]"></div>
+                            <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" preserveAspectRatio="none" viewBox="0 0 100 100">
+                                <path d="M 5,80 C 25,65 40,50 55,35 C 70,20 85,5 95,0" fill="none" stroke="rgba(54,124,245,0.5)" stroke-width="2" stroke-dasharray="4 4" class="[stroke-dashoffset:100] group-hover:animate-[dash_2s_linear_forwards]"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Simulador de Decisão (Restored) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Simulador de Decisão</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">Comprar a casa? Trocar o carro? Decisões grandes com dados, não impulso.</p>
+                    </div>
+                    <!-- Caminhos A B C -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-center justify-center mt-4">
+                        <div class="absolute inset-0 bg-[linear-gradient(45deg,#f4f4f5_25%,transparent_25%,transparent_75%,#f4f4f5_75%,#f4f4f5),linear-gradient(45deg,#f4f4f5_25%,transparent_25%,transparent_75%,#f4f4f5_75%,#f4f4f5)] bg-[length:20px_20px] bg-[position:0_0,10px_10px] opacity-40"></div>
+                        <div class="relative z-10 flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-white border border-zinc-200 shadow-sm flex items-center justify-center font-bold text-zinc-400 ">A</div>
+                            <div class="flex flex-col gap-4 justify-center relative">
+                                <div class="w-10 h-0.5 bg-zinc-300 transform -rotate-12 translate-y-2 relative overflow-hidden group-hover:bg-zinc-400 transition-colors"></div>
+                                <div class="w-10 h-0.5 bg-atlas-blue transform rotate-12 -translate-y-2 relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 h-full w-full bg-white opacity-50 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <div class="w-12 h-12 rounded-xl bg-white border border-zinc-200 shadow-sm flex items-center justify-center font-bold text-zinc-400 group-hover:scale-95 transition-transform ">B</div>
+                                <div class="w-12 h-12 rounded-xl bg-atlas-lightBlue/10 border border-atlas-lightBlue/30 shadow-md flex items-center justify-center font-bold text-atlas-blue ring-2 ring-atlas-blue ring-offset-2 ring-offset-zinc-50 group-hover:scale-110 transition-transform duration-300">C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Atlas IA (Restored) -->
+                <div class="group relative bg-[#0B1A30] border border-blue-900 rounded-3xl shadow-md overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-white mb-3 flex items-center gap-2">
+                            Atlas IA
+                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#A3E635] opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-[#A3E635]"></span></span>
+                        </h3>
+                        <p class="text-blue-100/70 text-[15px] leading-relaxed">Pergunta como pra um amigo. Responde como um planejador. Conhece seus números.</p>
+                    </div>
+                    <!-- Glow Animation -->
+                    <div class="relative w-full border-t border-white/10 h-48 overflow-hidden flex items-center justify-center mt-4">
+                        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(54,124,245,0.4)_0%,transparent_70%)]"></div>
+                        <div class="relative group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 animate-ping rounded-full bg-atlas-blue opacity-30 duration-1000"></div>
+                            <div class="w-14 h-14 bg-gradient-to-tr from-atlas-blue to-blue-400 rounded-full shadow-[0_0_40px_rgba(54,124,245,0.8)] flex items-center justify-center relative z-10">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Investimentos + Proventos (New) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Investimentos + Proventos</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">Carteira viva. Descubra quando sua renda passiva vai te libertar.</p>
+                    </div>
+                    <!-- Progress Bar to Freedom -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex flex-col items-center justify-center p-6 mt-4">
+                        <div class="w-full flex justify-between text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">
+                            <span>Renda Atual</span>
+                            <span class="text-atlas-green">Liberdade</span>
+                        </div>
+                        <div class="w-full h-3 bg-zinc-200 rounded-full overflow-hidden relative">
+                            <div class="h-full bg-atlas-blue w-[40%] rounded-full group-hover:w-[80%] transition-all duration-1000 ease-out relative">
+                                <div class="absolute top-0 right-0 bottom-0 w-4 bg-white/30 animate-pulse"></div>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2 text-xs font-bold text-zinc-700 bg-white px-3 py-1.5 rounded-lg border border-zinc-200 shadow-sm transform group-hover:-translate-y-1 transition-transform">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            R$ 4.500 / mês projetado
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Atlas Negócios (New) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Atlas Negócios</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">PF e PJ na mesma jornada. Para autônomos, MEIs e donos de empresa.</p>
+                    </div>
+                    <!-- PF / PJ Integration -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-center justify-center gap-6 mt-4">
+                        <div class="flex flex-col items-center gap-2 group-hover:-translate-x-2 transition-transform duration-500">
+                            <div class="w-12 h-12 bg-atlas-lightBlue/20 rounded-full flex items-center justify-center text-atlas-blue border-2 border-white shadow-md font-bold text-sm">PF</div>
+                        </div>
+                        <div class="flex flex-col gap-1 items-center z-10 relative">
+                            <div class="w-8 h-8 bg-white border border-zinc-200 rounded-full flex items-center justify-center shadow-sm group-hover:rotate-180 transition-transform duration-700">
+                                <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center gap-2 group-hover:translate-x-2 transition-transform duration-500">
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 border-2 border-white shadow-md font-bold text-sm">PJ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Household (Restored) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Household</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">Finanças do casal sem briga. Convide sem dar senha.</p>
+                    </div>
+                    <!-- Overlapping Avatars -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-center justify-center mt-4">
+                        <div class="flex -space-x-4 group-hover:-space-x-2 transition-all duration-500">
+                            <div class="w-16 h-16 rounded-full border-4 border-white bg-atlas-lightBlue/10 flex items-center justify-center shadow-md relative z-20 group-hover:rotate-[-10deg] transition-transform">
+                                <svg class="w-6 h-6 text-atlas-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                            <div class="w-16 h-16 rounded-full border-4 border-white bg-green-50 flex items-center justify-center shadow-md relative z-10 group-hover:rotate-[10deg] transition-transform">
+                                <svg class="w-6 h-6 text-[#1A2E05]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Plano da Liberdade (New) -->
+                <div class="group relative bg-white border border-zinc-200 rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="p-8 pb-4">
+                        <h3 class="text-xl font-bold text-atlas-dark mb-3">Plano da Liberdade</h3>
+                        <p class="text-zinc-600 text-[15px] leading-relaxed">33 aulas. O método em vídeo. Disponível no Elite.</p>
+                    </div>
+                    <!-- Video Player Mockup -->
+                    <div class="relative w-full border-t border-zinc-100 bg-zinc-50 h-48 overflow-hidden flex items-center justify-center p-6 mt-4">
+                        <div class="w-full max-w-[200px] bg-white border border-zinc-200 rounded-xl shadow-sm overflow-hidden group-hover:shadow-lg transition-shadow">
+                            <!-- Video area -->
+                            <div class="h-20 bg-zinc-800 relative flex items-center justify-center">
+                                <div class="w-8 h-8 bg-atlas-blue rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                </div>
+                            </div>
+                            <!-- Controls -->
+                            <div class="p-3 bg-white">
+                                <div class="w-full h-1 bg-zinc-100 rounded-full mb-2 overflow-hidden">
+                                    <div class="h-full bg-atlas-blue w-[30%] group-hover:w-[100%] transition-all duration-2000 ease-out"></div>
+                                </div>
+                                <div class="w-1/2 h-2 bg-zinc-200 rounded"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer Text -->
+            <div class="mt-16 flex flex-wrap justify-center items-center gap-4 md:gap-8 text-atlas-dark font-medium text-[13px] tracking-wide">
+                <span class="flex items-center gap-2"><span class="text-zinc-400">+</span> Aposentadoria mapeada</span>
+                <span class="flex items-center gap-2"><span class="text-zinc-400">+</span> Notificações inteligentes</span>
+                <span class="flex items-center gap-2"><span class="text-zinc-400">+</span> Web + Celular (PWA)</span>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- === SEÇÃO 7: A História Editorial === -->
+    <section id="section-7" class="w-full bg-atlas-bg py-10 md:py-40 px-6 lg:px-12 text-atlas-dark relative border-t border-zinc-200">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-24 relative">
+            
+            <!-- Esquerda: Título Fixo -->
+            <div class="w-full lg:w-5/12">
+                <div class="lg:sticky lg:top-32 self-start">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-8 h-px bg-zinc-400"></div>
+                        <span class="text-xs font-semibold tracking-widest text-zinc-500 uppercase">A Origem</span>
+                    </div>
+                    <h2 class="text-5xl md:text-6xl lg:text-7xl font-playfair font-normal italic leading-[1.1] mb-8 text-atlas-dark">
+                        Como o Atlas<br>Surgiu?
+                    </h2>
+                    <!-- Imagem Fornecida -->
+                    <div class="w-full h-64 rounded-2xl relative overflow-hidden hidden lg:block shadow-md">
+                        <img src="https://github.com/legendragon03453-dot/atlas/blob/main/Imagem%20de%20Fundo%204%20relatorios%202.png?raw=true" alt="Imagem 4 relatórios" class="w-full h-full object-cover object-center">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direita: Texto Editorial -->
+            <div class="w-full lg:w-7/12 flex flex-col gap-12 md:gap-16 text-lg md:text-xl lg:text-2xl text-zinc-700 font-medium leading-relaxed lg:mt-32">
+                
+                <p>
+                    Cresci em uma pousada no litoral de Santa Catarina. Meus pais tiveram o negócio por 25 anos sem planejamento. Em 2020, fechou.
+                </p>
+
+                <blockquote class="my-4 py-8 pl-8 md:pl-12 border-l-4 border-atlas-blue bg-white/50 rounded-r-2xl shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-white to-transparent opacity-80 pointer-events-none"></div>
+                    <p class="text-2xl md:text-4xl font-playfair font-normal italic text-atlas-dark leading-tight relative z-10">
+                        "E agora? Estamos fazendo certo?"
+                    </p>
+                    <div class="mt-6 text-sm md:text-base font-bold text-zinc-500 tracking-widest uppercase relative z-10">No segundo mês da pandemia</div>
+                </blockquote>
+
+                <p>
+                    Era minha vez de responder.
+                </p>
+
+
+
+                <p>
+                    Comecei a criar um sistema. Primeiro para mim e minha esposa. Depois para família e amigos. Esse sistema virou o Atlas.
+                </p>
+
+                <div class="p-8 md:p-12 bg-[#0B1A30] text-white rounded-3xl shadow-2xl mt-4 relative overflow-hidden">
+                    <!-- Detalhes do Card Dark -->
+                    <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                    <div class="absolute top-0 right-0 w-[50%] h-[50%] bg-atlas-blue/20 blur-[80px] rounded-full pointer-events-none"></div>
+                    
+                    <p class="relative z-10 text-xl md:text-2xl font-light leading-relaxed">
+                        Ele não diz o que fazer. Mostra onde você está, o próximo passo e o que muda se seguir um caminho diferente. <br><br>
+                        <strong class="font-playfair italic font-normal text-2xl md:text-4xl text-white">É o mapa que meus pais não tiveram quando precisaram.</strong>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+        <!-- === SEÇÃO 8: Pricing === -->
+    <section id="section-8" class="w-full bg-atlas-bg py-10 lg:py-32 px-4 relative border-t border-zinc-200">
+        <div class="container mx-auto max-w-6xl">
+            
+            <!-- Header Pricing -->
+            <div class="flex flex-col items-center text-center gap-6 mb-16">
+                <div class="px-4 py-1.5 rounded-full border border-atlas-lightBlue/30 bg-white shadow-sm text-sm font-semibold text-zinc-700">
+                    Escolha o nível certo para sua jornada
+                </div>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-atlas-dark tracking-tight max-w-3xl  ">
+                    E agora você também pode usar ele!
+                </h2>
+                
+
+            </div>
+
+            <!-- 3 Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-20 relative z-10">
+                
+                <!-- Essencial -->
+                <div class="bg-white rounded-3xl p-8 border border-zinc-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-dark mb-2">Essencial</h3>
+                        <p class="text-zinc-500 text-sm mb-6 h-auto min-h-[40px]">Para quem quer começar a enxergar.</p>
+                        <div class="flex items-end gap-1 mb-8">
+                            <span class="text-4xl font-bold text-atlas-dark price-value " data-mensal="15,90" data-anual="190,80">R$ 15,90</span>
+                            <span class="text-zinc-500 font-medium mb-1 price-period">/mês</span>
+                        </div>
+                        <a href="https://app.useatlasapp.com/comprar/essencial" class="block text-center w-full py-4 rounded-xl bg-atlas-red text-white font-bold hover:bg-atlas-red/90 transition-all shadow-[0_4px_14px_0_rgba(11,26,48,0.39)]">Assinar Plano</a>
+                    </div>
+                    
+                    <ul class="mt-14 space-y-4">
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Controle financeiro do dia a dia</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Análises Básicas e Atlas Score</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Acesso à Comunidade</span></li>
+                    </ul>
+                </div>
+
+                <!-- Pro (Destaque Animado) -->
+                <div class="bg-atlas-lightBlue/10 rounded-3xl p-8 border-2 border-atlas-blue shadow-[0_0_30px_rgba(54,124,245,0.2)] flex flex-col justify-between relative transform md:-translate-y-4">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-atlas-blue text-white text-xs font-bold px-4 py-1 rounded-full shadow-md uppercase tracking-wide">
+                        Mais Escolhido
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-dark mb-2">Pro</h3>
+                        <p class="text-zinc-500 text-sm mb-6 h-auto min-h-[40px]">Para quem quer planejar o futuro.</p>
+                        <div class="flex items-end gap-1 mb-8">
+                            <span class="text-4xl font-bold text-atlas-dark price-value " data-mensal="24,90" data-anual="298,80">R$ 24,90</span>
+                            <span class="text-zinc-500 font-medium mb-1 price-period">/mês</span>
+                        </div>
+                        <a href="https://app.useatlasapp.com/comprar/pro" class="block text-center w-full py-4 rounded-xl bg-atlas-red text-white font-extrabold hover:bg-atlas-red/90 transition-all shadow-[0_4px_14px_0_rgba(163,230,53,0.39)] animate-heartbeat">Assinar Plano</a>
+                    </div>
+                    
+                    <ul class="mt-14 space-y-4">
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm font-semibold text-atlas-dark">Tudo do Essencial</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Planejamento longo prazo & Cenários</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Método Atlas (Relatórios IA)</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Atlas Negócios & Importações</span></li>
+                    </ul>
+                </div>
+
+                <!-- Elite -->
+                <div class="bg-white rounded-3xl p-8 border border-zinc-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-dark mb-2">Elite</h3>
+                        <p class="text-zinc-500 text-sm mb-6 h-auto min-h-[40px]">Para quem quer maestria financeira.</p>
+                        <div class="flex items-end gap-1 mb-8">
+                            <span class="text-4xl font-bold text-atlas-dark price-value " data-mensal="32,90" data-anual="394,80">R$ 32,90</span>
+                            <span class="text-zinc-500 font-medium mb-1 price-period">/mês</span>
+                        </div>
+                        <a href="https://app.useatlasapp.com/comprar/elite" class="block text-center w-full py-4 rounded-xl bg-atlas-red text-white font-bold hover:bg-atlas-red/90 transition-all shadow-[0_4px_14px_0_rgba(11,26,48,0.39)]">Assinar Plano</a>
+                    </div>
+                    
+                    <ul class="mt-14 space-y-4">
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm font-semibold text-atlas-dark">Tudo do Pro</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Cursos Avançados</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Plano da Liberdade Integrado</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700">Suporte Prioritário</span></li>
+                        <li class="flex items-start gap-3"><svg class="w-5 h-5 text-atlas-blue shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg><span class="text-sm text-zinc-700 font-medium">Prioridade em Novas Features</span></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Tabela Comparativa (Responsive com Scroll Horizontal) -->
+            <div class="block w-full mt-16 lg:mt-24">
+                <h3 class="text-2xl font-bold text-center mb-10 text-atlas-dark">Compare todas as funcionalidades</h3>
+                
+                <div class="w-full overflow-x-auto pb-4 snap-x">
+                    <div class="w-full min-w-full md:min-w-[700px] grid grid-cols-[1.6fr_1fr_1fr_1fr] md:grid-cols-4 divide-x divide-zinc-200 border-t border-b border-zinc-200 bg-white shadow-sm rounded-xl overflow-hidden text-sm">
+                    <!-- Cabecalho da tabela -->
+                    <div class="bg-zinc-50 p-2 md:p-6 font-bold text-zinc-700 flex items-center sticky left-0 z-10 text-[10px] sm:text-xs md:text-base leading-tight">Funcionalidades</div>
+                    <div class="bg-zinc-50 p-2 md:p-6 font-bold text-center text-atlas-dark text-[10px] sm:text-xs md:text-lg flex items-center justify-center">Essencial</div>
+                    <div class="bg-atlas-lightBlue/10 p-2 md:p-6 font-bold text-center text-atlas-blue text-[10px] sm:text-xs md:text-lg border-b-2 border-atlas-blue flex items-center justify-center">Pro</div>
+                    <div class="bg-zinc-50 p-2 md:p-6 font-bold text-center text-atlas-dark text-[10px] sm:text-xs md:text-lg flex items-center justify-center">Elite</div>
+
+                    <!-- Row 1 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Controle do dia a dia</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 2 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Atlas Score & Simuladores Básicos</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 3 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Atlas Chat</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 4 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Planejamento Longo Prazo</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 5 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Método Atlas (Relatórios IA)</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 6 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Atlas Negócios & Importações</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 7 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Cursos Avançados</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    
+                    <!-- Row 8 (Text) -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Suporte</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50 text-zinc-500 font-medium text-[10px] md:text-sm">Comunidade</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50 text-zinc-700 font-medium text-[10px] md:text-sm">Email</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50 text-zinc-700 font-medium text-[10px] md:text-sm">Prioritário</div>
+                    <!-- Row 9 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Calculadoras Express</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 10 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Simulador de Decisão</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 11 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Aposentadoria: 3 Respostas</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-zinc-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 12 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-zinc-50 sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Objetivos de Vida Mapeados</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-atlas-lightBlue/10/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-zinc-50/50"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+                    <!-- Row 13 -->
+                    <div class="p-2 md:p-4 md:px-6 text-zinc-700 font-medium bg-white sticky left-0 z-10 border-r border-zinc-200 text-[10px] sm:text-xs md:text-sm leading-tight flex items-center">Calendário de Pagamentos</div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                    <div class="p-2 md:p-4 flex justify-center items-center bg-white"><svg class="w-4 h-4 md:w-5 md:h-5 text-atlas-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+
+
+                </div>
+                </div> <!-- Fechamento do overflow-x-auto -->
+                
+                <div class="mt-12 flex justify-center w-full">
+                    <a href="funcionalidades.html" class="inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-atlas-blue text-atlas-blue font-bold text-lg rounded-xl hover:bg-atlas-lightBlue/10 transition-colors shadow-sm hover:shadow-md">
+                        Ver lista completa de funcionalidades
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+<!-- === SEÇÃO 9: FAQ === -->
+    <section id="section-9" class="w-full bg-atlas-bg py-10 md:py-32 px-6 lg:px-12 relative border-t border-zinc-200">
+        <div class="max-w-3xl mx-auto flex flex-col items-center">
+            <h2 class="text-3xl md:text-5xl lg:text-6xl font-bold text-atlas-dark mb-16 text-center max-w-2xl mx-auto leading-tight tracking-tight  ">Ainda está com dúvidas sobre o Atlas?</h2>
+
+            <div class="w-full flex flex-col gap-4 mb-20" id="faq-container">
+                
+                <!-- Pergunta 1 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Como funciona o trial gratuito?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            Você se cadastra com email e recebe acesso completo a todas as ferramentas (exceto cursos do Plano da Liberdade) por 7 dias. Os planos só aparecem dentro da plataforma quando o trial terminar, sem cartão, sem cobrança automática.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 2 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Preciso colocar cartão pra começar?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            Não. Você cria conta só com email. O Atlas só apresenta os planos depois que você experimentou, dentro da plataforma.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 3 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Quanto tempo por dia preciso usar o Atlas?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            A maioria dos usuários gasta 5 minutos por dia, pra conferir o painel, perguntar ao Atlas IA, ou ajustar o plano. O sistema trabalha em segundo plano.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 4 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Já tenho contador / assessor de investimentos. O Atlas substitui?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            Não, complementa. Seu contador cuida do imposto, seu assessor da carteira. O Atlas é o sistema que conecta tudo na sua vida pessoal e mostra o quadro completo.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 5 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Posso usar com meu parceiro ou parceira?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            Sim, em todos os planos. Você convida por email, cada um tem seu acesso próprio (sem compartilhar senha), ambos veem o mesmo plano financeiro.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 6 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">O Plano da Liberdade e os outros cursos estão inclusos?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            O Plano da Liberdade, curso de 33 aulas em 8 módulos, é exclusivo do plano Elite. Os planos Essencial e Pro têm acesso completo às ferramentas do sistema, mas não ao curso. (Tem outros cursos aqui tambem).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pergunta 7 -->
+                <div class="faq-item group bg-white border border-atlas-blue/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer">
+                    <div class="faq-header flex justify-between items-center p-5 md:p-6 bg-white">
+                        <h3 class="text-base md:text-lg font-semibold text-atlas-dark pr-4">Como cancelo se não quiser continuar?</h3>
+                        <div class="w-8 h-8 rounded-full border border-zinc-200 flex items-center justify-center text-atlas-blue transition-transform faq-icon shrink-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-zinc-50/50">
+                        <div class="p-5 md:p-6 pt-0 text-zinc-600 leading-relaxed border-t border-zinc-100 mt-2">
+                            Você cancela direto nas configurações da conta, sem multa, sem ligação, sem burocracia. Mantém acesso até o fim do ciclo pago.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- P.S. Emocional -->
+            <div class="w-full p-8 md:p-14 bg-[#F9F6F0] rounded-3xl relative overflow-hidden shadow-inner border border-[#e2dfd8] text-center flex flex-col items-center">
+                <div class="absolute top-0 right-0 w-[40%] h-[40%] bg-gradient-to-bl from-atlas-blue/20 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-[40%] h-[40%] bg-gradient-to-tr from-[#A3E635]/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+                
+                <h4 class="font-playfair italic text-4xl text-atlas-blue mb-8 font-normal">P.S.</h4>
+                <div class="space-y-6 text-lg md:text-xl text-zinc-700 leading-relaxed font-medium relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+                    <p>Se você chegou até aqui é porque alguma coisa ressoou. Talvez seja o cansaço de não saber pra onde o dinheiro vai. Talvez seja o desejo de finalmente planejar aquela viagem, aquela casa, aquela aposentadoria e não ficar adiando porque "será que dá?".</p>
+                    <p>O Atlas não é a resposta. É o caminho. Os 7 dias grátis são pra você descobrir se ele serve pra você, sem risco, sem compromisso, sem cartão.</p>
+                    <p class="font-bold text-atlas-dark">Você não precisa decidir agora se vai usar o Atlas pelos próximos 10 anos. Só precisa decidir se vale clicar e testar 7 dias.</p>
+                    <a href="https://app.useatlasapp.com/comece" class="mt-8 px-12 py-5 rounded-full font-bold text-2xl md:text-3xl bg-atlas-red text-white hover:bg-atlas-red/90 transition-all shadow-[0_4px_24px_0_rgba(163,230,53,0.4)] animate-[bg-scroll_3s_linear_infinite] inline-block hover:-translate-y-1">
+                        Teste por 7 dias
+                    </a>
+                </div>
+                </div> <!-- Fechamento do overflow-x-auto -->
+                
+                <div class="mt-12 flex justify-center w-full">
+                    <a href="funcionalidades.html" class="inline-flex items-center gap-3 px-8 py-4 bg-white border-2 border-atlas-blue text-atlas-blue font-bold text-lg rounded-xl hover:bg-atlas-lightBlue/10 transition-colors shadow-sm hover:shadow-md">
+                        Ver lista completa de funcionalidades
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- === SEÇÃO 10: CTA FINAL === -->
+    <section id="section-10" class="w-full bg-gradient-to-b from-white via-[#eff4ff] to-[#d9e6ff] pt-20 md:pt-32 pb-0 px-6 relative overflow-hidden flex flex-col items-center border-t border-blue-50">
+        
+        <!-- Background Blur/Glow da Montanha -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-atlas-blue/20 blur-[120px] rounded-full pointer-events-none"></div>
+
+        <div class="text-center z-20 max-w-4xl mx-auto flex flex-col items-center relative">
+            <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-atlas-dark mb-6 tracking-tight leading-tight ">
+                Pronto para encontrar <br class="hidden md:block"/><span class="text-atlas-blue">seu caminho?</span>
+            </h2>
+            <p class="text-xl md:text-2xl text-zinc-600 font-medium max-w-2xl mx-auto mb-12 leading-relaxed">
+                O Atlas mostra onde você está hoje, o próximo passo e o que muda se escolher um caminho diferente. Sua jornada começa aqui.
+            </p>
+            
+            <button class="px-10 py-5 rounded-2xl bg-[#A3E635] text-atlas-dark text-xl md:text-2xl font-extrabold hover:bg-[#8cdc18] transition-all shadow-[0_4px_24px_0_rgba(163,230,53,0.5)] animate-heartbeat">
+                Começar agora!
+            </button>
+        </div>
+
+        <!-- Personagens Montanha -->
+        <div class="w-full max-w-5xl mx-auto mt-16 md:mt-24 relative z-10 flex justify-center translate-y-2 md:translate-y-4">
+            <img src="https://github.com/legendragon03453-dot/atlas/blob/main/Imagem%20de%20Fundo%204%20relatorios%202.webp?raw=true" alt="Jornada Atlas - O Topo da Montanha" class="w-[75%] md:w-[60%] lg:w-[65%] max-w-2xl object-contain drop-shadow-2xl mx-auto">
+        </div>
+
+    </section>
+    <!-- === FOOTER === -->
+    <footer class="w-full bg-atlas-blue py-2 md:py-4 px-6 relative z-20">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col items-center">
+                <!-- Logo -->
+                <div class="mb-4 flex items-center justify-center gap-4">
+                    <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas Logo" class="h-8 md:h-10 filter brightness-0 invert">
+                    <a href="https://instagram.com/atlas" target="_blank" class="w-8 h-8 md:w-10 md:h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-atlas-blue transition-all">
+                        <svg class="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                    </a>
+                </div>
+                
+                <!-- Links -->
+                <nav class="mb-4 flex flex-wrap justify-center gap-6 lg:gap-10 text-white/90 font-medium text-sm md:text-base">
+                    <a href="/" class="hover:text-white transition-colors">Início</a>
+                    <a href="/#section-7" class="hover:text-white transition-colors">A Metodologia</a>
+                    <a href="/#section-8" class="hover:text-white transition-colors">Preços</a>
+                    <a href="funcionalidades.html" class="hover:text-white transition-colors">Funcionalidades</a>
+                    <a href="/#section-9" class="hover:text-white transition-colors">Dúvidas Frequentes</a>
+                    <a href="suporte.html" class="hover:text-white transition-colors">Suporte</a>
+                </nav>
+                
+                <!-- Social Icons Moved to Logo Section -->
+                
+                <!-- Copyright -->
+                <div class="text-center pt-4 md:pt-6 border-t border-white/20 w-full pb-2 md:pb-0">
+                    <p class="text-sm text-white/60">
+                        &copy; 2026 Atlas. Todos os direitos reservados.
+                    </p>
+                    <p class="text-xs text-white/50 mt-1">
+                        CNPJ: 59.816.277/0001-30
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            
+        // Mobile Menu Toggle (Robust Version)
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const menuClose = document.getElementById('mobile-menu-close');
+        const menuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        
+        if(menuBtn && menuOverlay) {
+            menuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                menuOverlay.classList.remove('translate-y-[-100%]');
+                menuOverlay.classList.add('translate-y-0');
+                // Remove any inline styles if they were set previously
+                menuOverlay.style.transform = '';
+            });
+            menuClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                menuOverlay.classList.remove('translate-y-0');
+                menuOverlay.classList.add('translate-y-[-100%]');
+                menuOverlay.style.transform = '';
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuOverlay.classList.remove('translate-y-0');
+                    menuOverlay.classList.add('translate-y-[-100%]');
+                    menuOverlay.style.transform = '';
+                });
+            });
+        }
+
+            // Mensal / Anual Toggle
+            const btnMensal = document.getElementById('btn-mensal');
+            const btnAnual = document.getElementById('btn-anual');
+            const priceValues = document.querySelectorAll('.price-value');
+            const pricePeriods = document.querySelectorAll('.price-period');
+
+            if(btnMensal && btnAnual) {
+                btnMensal.addEventListener('click', () => {
+                    btnMensal.classList.add('bg-atlas-blue', 'text-white', 'shadow-md');
+                    btnMensal.classList.remove('text-zinc-500');
+                    btnAnual.classList.remove('bg-atlas-blue', 'text-white', 'shadow-md');
+                    btnAnual.classList.add('text-zinc-500');
+                    
+                    priceValues.forEach(el => el.textContent = 'R$ ' + el.getAttribute('data-mensal'));
+                    pricePeriods.forEach(el => el.textContent = '/mês');
+                });
+
+                btnAnual.addEventListener('click', () => {
+                    btnAnual.classList.add('bg-atlas-blue', 'text-white', 'shadow-md');
+                    btnAnual.classList.remove('text-zinc-500');
+                    btnMensal.classList.remove('bg-atlas-blue', 'text-white', 'shadow-md');
+                    btnMensal.classList.add('text-zinc-500');
+                    
+                    priceValues.forEach(el => el.textContent = 'R$ ' + el.getAttribute('data-anual'));
+                    pricePeriods.forEach(el => el.textContent = '/ano');
+                });
+            }
+
+            // FAQ Accordion
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                const content = item.querySelector('.faq-content');
+                const icon = item.querySelector('.faq-icon');
+                
+                header.addEventListener('click', () => {
+                    const isOpen = content.style.maxHeight;
+                    
+                    // Close all others
+                    faqItems.forEach(otherItem => {
+                        const otherContent = otherItem.querySelector('.faq-content');
+                        const otherIcon = otherItem.querySelector('.faq-icon');
+                        otherContent.style.maxHeight = null;
+                        otherIcon.style.transform = 'rotate(0deg)';
+                        otherItem.classList.remove('border-atlas-blue');
+                        otherItem.classList.add('border-atlas-blue/30');
+                    });
+                    
+                    if (!isOpen) {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.style.transform = 'rotate(180deg)';
+                        item.classList.remove('border-atlas-blue/30');
+                        item.classList.add('border-atlas-blue');
+                    }
+                });
+            });
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        // GSAP: Animação de Entrada (Intro Load)
+        if (window.innerWidth >= 768) {
+            const introTl = gsap.timeline();
+            introTl.from("header", { y: -50, opacity: 0, duration: 1, ease: "power3.out" })
+                   .from("h1", { y: 40, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.5")
+                   .from("p", { y: 30, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.7")
+                   .from(".hero-cta", { scale: 0.5, opacity: 0, duration: 0.8, ease: "back.out(1.7)" }, "-=0.6")
+                   // Animar as cortinas pretas do vídeo abrindo
+                   .to("#video-curtain-left", { scaleX: 0, duration: 1.5, ease: "power3.inOut" }, "-=1")
+                   .to("#video-curtain-right", { scaleX: 0, duration: 1.5, ease: "power3.inOut" }, "<");
+        }
+
+
+        ScrollTrigger.matchMedia({
+            "(min-width: 768px)": function() {
+                // Seta opacidade 0 apenas no desktop, pois no mobile não haverá fade-in
+                gsap.set("#s3-content", { opacity: 0 });
+
+                let tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#pin-master",
+                        start: "top top",
+                        end: "+=800",
+                        scrub: 0.5,
+                        pin: true,
+                        anticipatePin: 1
+                    }
+                });
+
+                tl.to({}, {duration: 0.5})
+                  .to("#s2-container .center-box, #s2-container .circle-container", { opacity: 0, duration: 1 })
+                  .to("#snowball", { autoAlpha: 1, duration: 1 }, "<")
+                  .to("#snowball", { scale: 0.25, duration: 1 })
+                  .to("#snowball", { top: "100vh", ease: "power2.in", duration: 1.5 })
+                  .to("#snowball", { 
+                      scaleX: 15, 
+                      scaleY: 3, 
+                      borderRadius: "50% 50% 0 0", 
+                      duration: 1.5,
+                      ease: "power2.out"
+                  })
+                  .to("#s3-content", { autoAlpha: 1, opacity: 1, duration: 1 })
+                  .to("#snowball", { opacity: 0, duration: 1 }, "<")
+                  .set("#s2-container", { display: "none" });
+            }
+        });
+    
+        
+        
+        // Lógica do Vídeo Hero
+        const video = document.getElementById('hero-video');
+        const snowfall = document.getElementById('snowfall-container');
+        let playCount = 0;
+        
+        // Create snow particles
+        for(let i=0; i<50; i++) {
+            let p = document.createElement('div');
+            p.className = 'snow-particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            snowfall.appendChild(p);
+        }
+
+        if (video) {
+            video.addEventListener('ended', () => {
+                playCount++;
+                if(playCount === 1) {
+                    // Dar reload e remover as bordas
+                    video.style.transform = 'scale(1.35)'; // Escala para cortar bordas pretas
+                    video.style.transition = 'transform 1.5s ease-in-out';
+                    video.currentTime = 0;
+                    video.play();
+                } else {
+                    // Fixar na imagem estática (já para no último frame) e mostrar neve
+                    snowfall.style.opacity = '1';
+                }
+            });
+        }
+
+        
+
+        // GSAP: Animação de preenchimento da Timeline na Seção 4
+        let path = document.querySelector('#timeline-path');
+        if (path) {
+            let length = path.getTotalLength();
+            gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+            
+            gsap.to(path, {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#section-4",
+                    start: "top 60%", // Começa quando o topo da seção 4 passar pelo meio da tela
+                    end: "bottom 80%", // Termina quando o final da seção estiver saindo
+                    scrub: 1
+                }
+            });
+        }
+
+    
+
+        // Animação de Scroll Reveal
+        gsap.utils.toArray('.').forEach(element => {
+            gsap.fromTo(element, 
+                { y: 50, opacity: 0 },
+                {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out"
+                }
+            );
+        });
+
+        
+        // Mostrar CTA do menu após 20% do scroll
+        window.addEventListener('scroll', () => {
+            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const navCta = document.getElementById('nav-cta-btn');
+            const header = document.getElementById('main-header');
+            if (navCta) {
+                if (scrollPercent > 20) {
+                    navCta.classList.remove('opacity-0', 'pointer-events-none');
+                    navCta.classList.add('opacity-100', 'pointer-events-auto');
+                } else {
+                    navCta.classList.add('opacity-0', 'pointer-events-none');
+                    navCta.classList.remove('opacity-100', 'pointer-events-auto');
+                }
+            }
+        });
+}); // Fim do DOMContentLoaded
+</script>
+            
+
+        <!-- Animações de Entrada Mobile (IntersectionObserver) -->
+        <script>
+        (function() {
+            if (!('IntersectionObserver' in window)) return;
+
+            // Timeline items
+            var timelineObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.remove('opacity-0', 'translate-y-8');
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        timelineObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.mobile-timeline-item').forEach(function(el) {
+                timelineObserver.observe(el);
+            });
+
+            // General mobile : sections fade up on enter
+            var generalObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                        generalObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08 });
+
+            })();
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+<!-- Menu Mobile Overlay -->
+            <div id="mobile-menu-overlay" class="fixed inset-0 bg-atlas-blue z-[100] transform translate-y-[-100%] transition-transform duration-300 ease-in-out flex flex-col items-center justify-center">
+                <button id="mobile-menu-close" class="absolute top-6 right-6 text-white p-2">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <nav class="flex flex-col gap-6 text-white font-bold text-2xl text-center">
+                    <a href="/#section-7" class="mobile-link">Sobre</a>
+                    <a href="/#section-8" class="mobile-link">Preços</a>
+                    <a href="funcionalidades.html" class="mobile-link">Funcionalidades</a>
+                    <a href="/#section-9" class="mobile-link">FAQ</a>
+                    <a href="suporte.html" class="mobile-link">Suporte</a>
+                    <!-- CTA & Login -->
+                    <div class="flex flex-col items-center gap-3 mt-2">
+                        <a href="https://app.useatlasapp.com/auth" class="text-white/80 font-semibold text-base border border-white/30 px-8 py-3 rounded-full w-full text-center hover:bg-white/10 transition-colors">Entrar / Login</a>
+                    </div>
+        </nav>
+        </div>
+
+    <!-- Botão Flutuante de Assinatura -->
+    <div id="floating-cta" class="fixed bottom-6 lg:bottom-10 left-1/2 -translate-x-1/2 z-[90] transition-all duration-500 opacity-0 translate-y-10 pointer-events-none">
+        <a href="#section-8" class="bg-atlas-red text-white hover:bg-atlas-red/90 shadow-[0_8px_32px_rgba(200,20,30,0.5)] py-3 px-8 rounded-full font-extrabold text-lg flex items-center justify-center gap-2 whitespace-nowrap pointer-events-auto border border-white/20 transition-transform hover:-translate-y-1 uppercase tracking-wide">
+            <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas" class="h-5 filter brightness-0 invert opacity-90 mt-[2px]">
+            Assinar Atlas
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingBtn = document.getElementById('floating-cta');
+            const pricingSection = document.getElementById('section-8'); // Preços
+            const footerSection = document.getElementById('main-footer'); // Or end of page
+            
+            window.addEventListener('scroll', () => {
+                if (!floatingBtn) return;
+                const scrollY = window.scrollY;
+                
+                // Mostra o botão depois de rolar a página (passando da Hero Section)
+                let shouldShow = scrollY > window.innerHeight * 0.8;
+                
+                // Oculta o botão se já estiver na seção de Preços para não ficar redundante
+                if (pricingSection) {
+                    const pricingRect = pricingSection.getBoundingClientRect();
+                    // Se a seção de preços estiver bem visível na tela
+                    if (pricingRect.top < window.innerHeight && pricingRect.bottom > 0) {
+                        shouldShow = false;
+                    }
+                }
+                
+                // Oculta se o footer estiver na tela para não colidir
+                const footerEl = document.querySelector('footer');
+                if (footerEl) {
+                    const footerRect = footerEl.getBoundingClientRect();
+                    if (footerRect.top < window.innerHeight) {
+                        shouldShow = false;
+                    }
+                }
+                
+                if (shouldShow) {
+                    floatingBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    floatingBtn.classList.add('opacity-100', 'translate-y-0');
+                } else {
+                    floatingBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    floatingBtn.classList.remove('opacity-100', 'translate-y-0');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionalidades - Atlas</title>
+    <link rel="icon" type="image/webp" href="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        atlas: {
+                            blue: '#1C5E91',
+                            bg: '#FDF4E8',
+                            green: '#1E613E',
+                            red: '#B82B26',
+                            yellow: '#F2AB0C',
+                            dark: '#040C11',
+                            lightBlue: '#69A0C1',
+                            lightGreen: '#72B28F',
+                            beige: '#EFCA71',
+                            pink: '#D37976'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        
+        
+        // Lógica do Vídeo Hero
+        const video = document.getElementById('hero-video');
+        const snowfall = document.getElementById('snowfall-container');
+        let playCount = 0;
+        
+        // Create snow particles
+        for(let i=0; i<50; i++) {
+            let p = document.createElement('div');
+            p.className = 'snow-particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.width = p.style.height = (Math.random() * 4 + 2) + 'px';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            snowfall.appendChild(p);
+        }
+
+        if (video) {
+            video.addEventListener('ended', () => {
+                playCount++;
+                if(playCount === 1) {
+                    // Dar reload e remover as bordas
+                    video.style.transform = 'scale(1.35)'; // Escala para cortar bordas pretas
+                    video.style.transition = 'transform 1.5s ease-in-out';
+                    video.currentTime = 0;
+                    video.play();
+                } else {
+                    // Fixar na imagem estática (já para no último frame) e mostrar neve
+                    snowfall.style.opacity = '1';
+                }
+            });
+        }
+
+        
+
+        
+        // GSAP: Animação de entrada nas seções de funcionalidades
+        gsap.utils.toArray('.feature-section').forEach(section => {
+            gsap.from(section, {
+                opacity: 0,
+                y: 40,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: section,
+                    start: 'top 85%',
+                }
+            });
+        });
+
+        // GSAP: Animação de preenchimento da Timeline na Seção 4
+        let path = document.querySelector('#timeline-path');
+        if (path) {
+            let length = path.getTotalLength();
+            gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+            
+            gsap.to(path, {
+                strokeDashoffset: 0,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#section-4",
+                    start: "top 60%", // Começa quando o topo da seção 4 passar pelo meio da tela
+                    end: "bottom 80%", // Termina quando o final da seção estiver saindo
+                    scrub: 1
+                }
+            });
+        }
+
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Familjen Grotesk';
+            src: url('https://raw.githubusercontent.com/legendragon03453-dot/atlas/main/FamiljenGrotesk-VariableFont_wght.ttf') format('truetype');
+            font-weight: 100 900;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Familjen Grotesk', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: #1C5E91; /* Cor de fundo base caso o vídeo falhe */
+        }
+
+        /* Estilos personalizados para os polígonos e gradientes */
+        .hero-container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+        }
+
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -3; /* Atrás de tudo */
+        }
+
+        /* Overlay preto 15% */
+        .overlay-black {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.15);
+            z-index: -2;
+        }
+
+        /* Overlay Gradiente Azul (referenciando a imagem) */
+        .overlay-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%; /* Cobre a parte inferior */
+            background: linear-gradient(to top, #1C5E91 0%, rgba(28, 94, 145, 0) 100%);
+            z-index: -1;
+        }
+
+        /* Navbar com formato trapezoidal */
+        
+
+        @media (max-width: 1024px) {
+            .navbar-shape {
+                width: 90%;
+                padding: 0 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-shape {
+                width: 95%;
+                clip-path: none;
+                border-radius: 100px;
+                padding: 0.5rem 1.5rem;
+                flex-direction: row;
+                justify-content: space-between;
+                height: 60px;
+                top: 10px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .navbar-shape .btn-nav {
+                height: 36px;
+                padding: 0 1rem;
+                font-size: 12px;
+                clip-path: none;
+                border-radius: 100px;
+            }
+            .navbar-shape img {
+                height: 24px;
+            }
+        }
+
+        /* Estilos do Botão Hero */
+        .hero-cta {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 20px rgba(184, 43, 38, 0.4);
+        }
+
+        /* Estilos do Botão Cinza Claro na Navbar */
+        .btn-nav {
+            background-color: #E2E8F0;
+            color: #1A2E44;
+            transition: background-color 0.2s;
+            clip-path: polygon(0 0, 100% 0, 92% 100%, 0% 100%);
+            height: 44px;
+            padding: 0 1.8rem 0 1.2rem;
+        }
+        .btn-nav:hover {
+            background-color: #CBD5E1;
+        }
+
+        @keyframes text-gradient-loop {
+            to { background-position: 200% center; }
+        }
+
+        /* Destaque no Texto Animado */
+        .text-highlight {
+            background: linear-gradient(to right, #4B96FF, #AFFF00, #00d2ff, #4B96FF);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            animation: text-gradient-loop 4s linear infinite;
+            text-shadow: 0px 2px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Sombra no texto principal para melhor legibilidade no vídeo */
+        .text-shadow-custom {
+            text-shadow: 0px 2px 15px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Avatares dos usuários */
+        .avatar-group {
+            display: flex;
+            align-items: center;
+        }
+        .avatar-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            background-color: #ccc;
+            margin-left: -10px;
+        }
+        .avatar-circle:first-child {
+            margin-left: 0;
+            background-color: #555;
+        }
+        .avatar-circle:nth-child(2) {
+            background-color: #888;
+        }
+        .avatar-circle:nth-child(3) {
+            background-color: #eee;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes orbit-reverse {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        /* Seção 2 - Círculo */
+        .circle-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 2px solid #1c4b96; /* Azul escuro do contorno */
+            animation: orbit 45s linear infinite;
+        }
+        @media (min-width: 768px) {
+            .circle-container {
+                width: 450px;
+                height: 450px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .circle-container {
+                width: 600px;
+                height: 600px;
+            }
+        }
+        
+        .circle-dot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: orbit-reverse 45s linear infinite;
+        }
+        @media (min-width: 768px) {
+            .circle-dot {
+                width: 32px;
+                height: 32px;
+            }
+        }
+        
+        .center-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1rem;
+            text-align: center;
+            z-index: 10;
+            width: max-content;
+            max-width: 90%;
+        }
+        @media (min-width: 768px) {
+            .center-box {
+                padding: 1.5rem 2rem;
+            }
+        }
+    
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes glow-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .animate-glow-sweep {
+            animation: glow-sweep 8s linear infinite;
+        }
+        @keyframes needle-swing {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(70deg); }
+        }
+        .animate-needle {
+            animation: needle-swing 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(110vh) translateX(50px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes bg-scroll {
+            0% { background-position: 0% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Snowfall effect */
+        .snow-particle {
+            position: absolute;
+            top: -10px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10px) translateX(0px); }
+            100% { transform: translateY(100vh) translateX(20px); }
+        }
+
+        </style>
+
+</head>
+<body class="bg-atlas-bg text-atlas-dark font-sans">
+    
+
+        <!-- Navbar -->
+    <header id="main-header" class="fixed top-0 left-0 w-full flex justify-center z-50 transition-all duration-300 mt-4 px-3 md:px-0">
+    <nav class="w-full max-w-[1200px] flex justify-between items-center px-5 md:px-8 py-3 md:py-4 bg-black/60 backdrop-blur-xl border border-white/10 rounded-[40px] shadow-2xl">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex justify-start items-center">
+                    <a href="/">
+                        <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas Logo" class="h-10 cursor-pointer">
+                    </a>
+                </div>
+
+                <!-- Links de Navegação -->
+                <div class="nav-links flex-1 hidden md:flex justify-center items-center gap-4 lg:gap-8 text-white font-medium text-[14px] lg:text-[16px] whitespace-nowrap px-4">
+                    <a href="/#section-7" class="hover:text-blue-200 transition-colors">Sobre</a>
+                    <a href="/#section-8" class="hover:text-blue-200 transition-colors">Preços</a>
+                    <a href="funcionalidades.html" class="hover:text-blue-200 transition-colors">Funcionalidades</a>
+                    <a href="/#section-9" class="hover:text-blue-200 transition-colors">FAQ</a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">Suporte</a>
+                </div>
+
+                <!-- Botões da Direita -->
+                <div class="flex-shrink-0 flex justify-end items-center gap-3">
+                    <a href="https://app.useatlasapp.com/auth" class="text-white font-medium text-[14px] lg:text-[16px] hover:text-blue-200 transition-colors hidden md:block">Entrar</a>
+                    
+                    <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-white/90 focus:outline-none cursor-pointer z-[100] relative">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </nav>
+    </header>
+
+            
+
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-20 bg-white border-b border-zinc-200">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-playfair font-normal italic mb-4 text-atlas-dark">O Mapa Completo.</h1>
+            <p class="text-xl text-zinc-600 max-w-2xl mx-auto">Tudo que o Atlas faz para transformar a sua relação com o dinheiro, do dia a dia à sua aposentadoria.</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-16 flex flex-col lg:flex-row gap-12 relative">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block w-1/4">
+            <div class="sticky top-32 space-y-2">
+                <h3 class="text-xs font-bold text-zinc-400 tracking-widest uppercase mb-4">Índice</h3>
+                <nav class="flex flex-col space-y-1">
+                    <a href="#fundacao" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Fundação e Família</a>
+                    <a href="#dia-a-dia" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Controle do Dia a Dia</a>
+                    <a href="#analise" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Análise e Inteligência</a>
+                    <a href="#decisoes" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Decisões Estratégicas</a>
+                    <a href="#planejamento" class="px-3 py-2 text-sm font-bold text-atlas-blue bg-atlas-lightBlue/10/50 hover:bg-atlas-lightBlue/10 rounded-lg transition-colors flex justify-between items-center">Planejamento [PRO]</a>
+                    <a href="#metodo" class="px-3 py-2 text-sm font-bold text-atlas-blue bg-atlas-lightBlue/10/50 hover:bg-atlas-lightBlue/10 rounded-lg transition-colors flex justify-between items-center">Método Atlas [PRO]</a>
+                    <a href="#negocios" class="px-3 py-2 text-sm font-bold text-atlas-blue bg-atlas-lightBlue/10/50 hover:bg-atlas-lightBlue/10 rounded-lg transition-colors flex justify-between items-center">Atlas Negócios [PRO]</a>
+                    <a href="#educacao" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Ecossistema de Educação</a>
+                    <a href="#comparacao" class="px-3 py-2 text-sm text-zinc-600 hover:text-atlas-blue hover:bg-atlas-lightBlue/10 rounded-lg transition-colors font-medium">Comparação de Planos</a>
+                </nav>
+
+            
+
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="w-full lg:w-3/4 space-y-24">
+            
+            <!-- Fundação e Família -->
+            <section class="feature-section" id="fundacao" class="scroll-mt-32">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-atlas-dark mb-2">Fundação e Família</h2>
+                    <p class="text-zinc-500 text-lg">O Atlas foi feito para organizar a vida sozinho ou a dois, sem fricção.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Multi-Perfil Integrado</h3>
+                        <p class="text-zinc-500 text-sm relative z-10">Cadastre Pessoa 1 e Pessoa 2. O Atlas separa automaticamente de quem é cada despesa e receita.</p>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <style>
+                        @keyframes slidePill {
+                            0%, 25% { left: 4px; }
+                            40%, 60% { left: calc(33.33% + 1px); }
+                            75%, 100% { left: calc(66.66% - 2px); }
+                        }
+                        @keyframes colorHighlight1 {
+                            0%, 25% { color: #1C5E91; }
+                            40%, 100% { color: #71717a; }
+                        }
+                        @keyframes colorHighlight2 {
+                            0%, 25% { color: #71717a; }
+                            40%, 60% { color: #1C5E91; }
+                            75%, 100% { color: #71717a; }
+                        }
+                        @keyframes colorHighlight3 {
+                            0%, 60% { color: #71717a; }
+                            75%, 100% { color: #1C5E91; }
+                        }
+                        </style>
+                        <div class="w-full max-w-[220px] h-10 bg-zinc-100 rounded-full flex items-center relative mb-4 shadow-inner group-hover:shadow-[0_0_15px_rgba(54,124,245,0.2)] transition-shadow duration-500 mx-auto border border-zinc-200">
+                            <div class="absolute w-[31%] h-8 bg-white rounded-full shadow-sm top-[3px] animate-[slidePill_6s_infinite_alternate_ease-in-out]"></div>
+                            <div class="flex-1 text-[11px] font-bold relative z-10 text-center animate-[colorHighlight1_6s_infinite_alternate_ease-in-out]">Pessoa 1</div>
+                            <div class="flex-1 text-[11px] font-bold relative z-10 text-center animate-[colorHighlight2_6s_infinite_alternate_ease-in-out]">Casal</div>
+                            <div class="flex-1 text-[11px] font-bold relative z-10 text-center animate-[colorHighlight3_6s_infinite_alternate_ease-in-out]">Pessoa 2</div>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Seletor de Visão</h3>
+                        <p class="text-zinc-500 text-sm relative z-10">Três botões no topo da tela: Pessoa 1, Pessoa 2 ou Casal. Alterne instantaneamente para ver os dados isolados ou juntos.</p>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controle do Dia a Dia -->
+            <section class="feature-section" id="dia-a-dia" class="scroll-mt-32">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-atlas-dark mb-2">Controle do Dia a Dia</h2>
+                    <p class="text-zinc-500 text-lg">A fundação de tudo: o lançamento fácil, rápido e a visão do seu mês.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow md:col-span-2">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-1">Lançamento Diário Organizado</h3>
+                        <p class="text-sm font-semibold text-atlas-blue mb-2 md:hidden">8 Abas</p>
+                        <p class="text-zinc-600 text-sm mb-4">Sua tela de Planejamento e Controle é dividida metodicamente:</p>
+<!-- Lançamento diário sem imagem placeholder -->
+                        <div class="flex flex-wrap gap-2 justify-center md:justify-start mt-4">
+                            <span class="px-3 py-1 bg-zinc-100 text-zinc-700 text-xs font-semibold rounded-full border border-zinc-200">Geral</span>
+                            <span class="px-3 py-1 bg-zinc-100 text-zinc-700 text-xs font-semibold rounded-full border border-zinc-200">Orçamento</span>
+                            <span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-full border border-green-200">Receitas</span>
+                            <span class="px-3 py-1 bg-atlas-lightBlue/10 text-blue-700 text-xs font-semibold rounded-full border border-atlas-lightBlue/30">Fixas</span>
+                            <span class="px-3 py-1 bg-orange-50 text-orange-700 text-xs font-semibold rounded-full border border-orange-200">Variáveis</span>
+                            <span class="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full border border-purple-200">Parcelas</span>
+                            <span class="px-3 py-1 bg-red-50 text-red-700 text-xs font-semibold rounded-full border border-red-200">Dívidas</span>
+                            <span class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-semibold rounded-full border border-teal-200">Economias</span>
+                        </div>
+                    </div>
+                    
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Calendário de Pagamentos</h3>
+                        <p class="text-zinc-600 text-sm">Visão diária do seu mês. Cada dia mostra o que tem para receber e o que tem para pagar. Evite surpresas no saldo e antecipe seu fluxo.</p>
+<div class="mt-6 rounded-xl overflow-hidden border border-zinc-200 shadow-sm"><img src="https://github.com/legendragon03453-dot/atlas/raw/main/ATLAS/IMG%206_1x.webp" alt="Screenshot" class="w-full h-auto"></div>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-atlas-lightBlue/30 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-4 right-4 bg-atlas-blue text-white text-[10px] font-bold px-2 py-1 rounded">PRO</div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Fluxo de Caixa & Importação</h3>
+                        <p class="text-zinc-600 text-sm">Visualize seu fluxo completo. Importe o extrato do seu banco via OFX ou traga os dados da sua planilha de uma vez só com nosso importador inteligente.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Análise e Inteligência -->
+            <section class="feature-section" id="analise" class="scroll-mt-32">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-atlas-dark mb-2">Análise e Inteligência</h2>
+                    <p class="text-zinc-500 text-lg">Dado sem análise não muda nada. Transforme números em decisões.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <!-- Score Ring -->
+                        <div class="w-full bg-zinc-50 h-32 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden group-hover:bg-atlas-lightBlue/10/50 transition-colors">
+                            <div class="relative w-20 h-20">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-zinc-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"/>
+                                    <path class="text-atlas-blue drop-shadow-md group-hover:stroke-[#AFFF00] transition-colors duration-500" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center flex-col">
+                                    <span class="text-2xl font-bold text-atlas-dark leading-none">85</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Atlas Score</h3>
+                        <p class="text-zinc-600 text-sm">Uma nota de 0 a 100 que resume sua saúde financeira em 7 pilares vitais: reserva, margem, disciplina, alocação, aposentadoria, evolução e saúde PJ.</p>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <!-- IA Glow -->
+                        <div class="w-full bg-[#0B1A30] h-32 rounded-xl mb-4 flex items-center justify-center relative overflow-hidden">
+                            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(54,124,245,0.4)_0%,transparent_70%)]"></div>
+                            <div class="relative group-hover:scale-110 transition-transform duration-700">
+                                <div class="absolute inset-0 animate-ping rounded-full bg-atlas-blue opacity-30 duration-1000"></div>
+                                <div class="w-12 h-12 bg-gradient-to-tr from-atlas-blue to-blue-400 rounded-full shadow-[0_0_20px_rgba(54,124,245,0.8)] flex items-center justify-center relative z-10">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Atlas Chat (Sua IA)</h3>
+                        <p class="text-zinc-600 text-sm">Pergunte como para um amigo, ele responde como um planejador. "Qual foi minha maior despesa?", A IA responde baseada nos seus dados reais e sabe separar você do seu parceiro(a).</p>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow md:col-span-2">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">O Dashboard de Análises</h3>
+                        <p class="text-zinc-600 text-sm mb-4">A tela onde você olha seu mês com profundidade, desenhada para ser lida na ordem do consultor:</p>
+                        <ul class="text-sm text-zinc-600 space-y-2 list-disc list-inside">
+                            <li><strong>Diagnóstico Automático:</strong> Parágrafo gerado pela leitura dos seus dados apontando o que funciona.</li>
+                            <li><strong>Pontos de Atenção:</strong> Alertas diretos e específicos.</li>
+                            <li><strong>Para Onde Vai:</strong> Quebra das suas despesas por categoria.</li>
+                            <li><strong>Horizonte de Parcelamentos:</strong> A curva das parcelas pendentes projetada nos meses seguintes.</li>
+                            <li><strong>Visão Anual:</strong> Evolução dos últimos 6 meses.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Decisões Estratégicas -->
+            <section class="feature-section" id="decisoes" class="scroll-mt-32">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold text-atlas-dark mb-2">Decisões Estratégicas</h2>
+                    <p class="text-zinc-500 text-lg">Simuladores de alto impacto para testar o futuro antes de assinar o contrato.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Simulador de Decisão</h3>
+                        <p class="text-zinc-600 text-sm">Oito cenários práticos (comprar imóvel, trocar carro, novo filho, etc.). Insira os dados e veja o impacto exato na sua parcela, fluxo de caixa e no seu Atlas Score e gere uma análise de viabilidade por IA.</p>
+<div class="mt-6 rounded-xl overflow-hidden border border-zinc-200 shadow-sm"><img src="https://github.com/legendragon03453-dot/atlas/blob/main/ATLAS/IMG%204_1x.webp?raw=true" alt="Screenshot" class="w-full h-auto"></div>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Consórcio vs Financiamento</h3>
+                        <p class="text-zinc-600 text-sm">Compare as duas opções lado a lado, avaliando não só juros e tempo, mas o custo de oportunidade real do seu dinheiro.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-2xl border border-atlas-lightBlue/30 shadow-sm md:col-span-2 relative overflow-hidden">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Calculadoras Express</h3>
+                        <p class="text-zinc-600 text-sm">Respostas imediatas: <strong>Express Aposentadoria</strong> (quanto poupar hoje para sua renda do futuro) e <strong>Express Objetivos</strong> (quanto aportar por mês para juntar X em Y anos).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Planejamento Financeiro [PRO] -->
+            <section class="feature-section" id="planejamento" class="scroll-mt-32">
+                <div class="mb-8 flex items-center gap-3">
+                    <h2 class="text-3xl font-bold text-atlas-dark">Planejamento Financeiro</h2>
+                    <span class="bg-atlas-blue text-white text-xs font-bold px-2.5 py-1 rounded-md">PRO</span>
+                </div>
+                <p class="text-zinc-500 text-lg mb-8">Construa o seu futuro. Módulos avançados que costuram seus investimentos, bens, metas e seguros em um plano de vida.</p>
+                
+                <div class="space-y-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Aposentadoria: 3 Respostas Diferentes</h3>
+                        <p class="text-zinc-600 text-sm mb-3">Preencha seu cenário real e descubra o quanto você precisa aportar hoje para alcançar os 3 caminhos:</p>
+<div class="mt-6 rounded-xl overflow-hidden border border-zinc-200 shadow-sm"><img src="https://github.com/legendragon03453-dot/atlas/blob/main/ATLAS/IMG%202_1x.webp?raw=true" alt="Screenshot" class="w-full h-auto"></div>
+                        <ul class="text-sm text-zinc-600 list-disc list-inside">
+                            <li><strong>Cenário Realidade:</strong> Onde você vai chegar mantendo o aporte atual.</li>
+                            <li><strong>Cenário Consumo:</strong> Juntar para gastar consumindo o patrimônio até o fim da vida.</li>
+                            <li><strong>Cenário Viver de Renda:</strong> O valor necessário para viver apenas de dividendos, sem encostar no principal.</li>
+                        </ul>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Objetivos de Vida Mapeados</h3>
+                        <p class="text-zinc-600 text-sm">Saia do "um dia eu quero" para o "quanto e quando". Cadastre metas (carro, casamento, filho) e o Atlas calcula o aporte sugerido com juros. Se deixar de aportar, ele avisa que a meta está atrasando.</p>
+<div class="mt-6 rounded-xl overflow-hidden border border-zinc-200 shadow-sm"><img src="https://github.com/legendragon03453-dot/atlas/blob/main/ATLAS/IMG%203_1x.webp?raw=true" alt="Screenshot" class="w-full h-auto"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                            <!-- Progress Bar to Freedom -->
+                        <div class="w-full border border-zinc-100 bg-zinc-50 h-32 rounded-xl mb-4 overflow-hidden flex flex-col items-center justify-center px-6">
+                            <div class="w-full flex justify-between text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">
+                                <span>Renda Atual</span>
+                                <span class="text-atlas-green">Liberdade</span>
+                            </div>
+                            <div class="w-full h-3 bg-zinc-200 rounded-full overflow-hidden relative">
+                                <div class="h-full bg-atlas-blue w-[40%] rounded-full group-hover:w-[80%] transition-all duration-1000 ease-out relative">
+                                    <div class="absolute top-0 right-0 bottom-0 w-4 bg-white/30 animate-pulse"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Investimentos & Proventos</h3>
+                            <p class="text-zinc-600 text-sm">Visão consolidada da carteira, Stock Guide, histórico, importação de notas e cálculo de Resultado de Imposto de Renda. Seus investimentos conversam com seu planejamento.</p>
+                        </div>
+                        <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                            <h3 class="text-lg font-bold text-atlas-dark mb-2">Bens, Imóveis e Seguros</h3>
+                            <p class="text-zinc-600 text-sm">Descubra seu Patrimônio Líquido real (descontando dívidas do bem). Calcule matematicamente o seu <strong>Seguro de Vida Ideal</strong> para proteger sua família.</p>
+                        </div>
+                    </div>
+                    <div class="bg-[#0B1A30] text-white p-8 rounded-2xl border border-[#1e293b] shadow-xl relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                        <div class="relative z-10">
+                            <h3 class="text-2xl font-bold mb-3">Análise Atlas (O Clímax)</h3>
+                            <p class="text-blue-100/80 text-sm mb-4">A tela onde toda a sua vida se cruza. Ela não te mostra dados isolados, ela faz as perguntas difíceis do consultor:</p>
+                            <ul class="text-sm text-blue-100/80 space-y-2 list-disc list-inside font-medium">
+                                <li>A sua reserva aguenta o seu estilo de vida?</li>
+                                <li>Índice de Independência Financeira (o quanto já caminhou para viver de renda).</li>
+                                <li>Suas metas batem com a sua realidade atual de poupança?</li>
+                                <li>Trajetória do seu Atlas Score.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Método Atlas [PRO] -->
+            <section class="feature-section" id="metodo" class="scroll-mt-32">
+                <div class="mb-8 flex items-center gap-3">
+                    <h2 class="text-3xl font-bold text-atlas-dark">Método Atlas (Consultoria IA)</h2>
+                    <span class="bg-atlas-blue text-white text-xs font-bold px-2.5 py-1 rounded-md">PRO</span>
+                </div>
+                <p class="text-zinc-500 text-lg mb-8">Cinco relatórios profundos gerados sob demanda por Inteligência Artificial sobre os seus dados. O trabalho de um planejador financeiro automatizado.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow md:col-span-2">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">1. A Vista da Montanha</h3>
+                        <p class="text-zinc-600 text-sm">A projeção do seu patrimônio até o fim da vida em um gráfico vivo. Arraste o aporte ou a rentabilidade e veja a curva mudar na hora. Adicione "eventos" (ex: ter filho) e veja o tranco financeiro a longo prazo.</p>
+                        <div class="mt-6 rounded-xl overflow-hidden border border-zinc-200 shadow-sm"><img src="https://github.com/legendragon03453-dot/atlas/blob/main/ATLAS/IMG%207_1x.webp?raw=true" alt="Vista da Montanha" class="w-full h-auto"></div>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">2. Base da Montanha</h3>
+                        <p class="text-zinc-600 text-sm">Raio-X da fundação: reserva em meses, liquidez, e um "Semáforo" dizendo a recomendação mais urgente que você deve seguir hoje.</p>
+                        <div class="h-40 bg-zinc-50 rounded-xl border border-zinc-200 mt-4 overflow-hidden relative flex flex-col justify-center px-6 gap-6 group-hover:border-atlas-blue/40 transition-colors duration-500">
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-zinc-500 mb-2"><span>Reserva de Emergência</span><span class="text-atlas-green">6 Meses</span></div>
+                                <div class="h-3 bg-zinc-200 rounded-full overflow-hidden">
+                                    <div class="h-full bg-green-500 w-0 transition-all duration-1000 ease-out group-hover:w-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-zinc-400">Status:</span>
+                                <div class="flex gap-2 p-2 bg-white rounded-lg border border-zinc-200 shadow-sm">
+                                    <div class="w-3 h-3 rounded-full bg-zinc-200 group-hover:bg-red-500/20 transition-colors"></div>
+                                    <div class="w-3 h-3 rounded-full bg-zinc-200 group-hover:bg-yellow-500/20 transition-colors"></div>
+                                    <div class="w-3 h-3 rounded-full bg-zinc-200 group-hover:bg-green-500 group-hover:shadow-[0_0_8px_rgba(34,197,94,0.6)] transition-all delay-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">3. Estratégia de Subida</h3>
+                        <p class="text-zinc-600 text-sm">Cruza sua capacidade com seus sonhos. Avalia a viabilidade do plano, aponta o "gap" financeiro e o que deve ser ajustado.</p>
+                        <div class="h-40 bg-zinc-50 rounded-xl border border-zinc-200 mt-4 overflow-hidden relative flex items-center justify-center group-hover:border-atlas-blue/40 transition-colors duration-500">
+                            <div class="relative w-28 h-28">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-zinc-200" stroke-width="3"></circle>
+                                    <circle cx="18" cy="18" r="16" fill="none" class="stroke-atlas-blue" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="100">
+                                        <animate attributeName="stroke-dashoffset" values="100;25" dur="1.5s" fill="freeze" begin="mouseover" />
+                                    </circle>
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="font-bold text-2xl text-zinc-800">75%</span>
+                                    <span class="text-[8px] uppercase tracking-wider text-zinc-400 font-bold">Viável</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">4. Controle da Jornada</h3>
+                        <p class="text-zinc-600 text-sm">O acompanhamento do fluxo de caixa: onde você está se desviando e alertas operacionais para manter o plano nos trilhos.</p>
+                        <div class="h-40 bg-zinc-50 rounded-xl border border-zinc-200 mt-4 overflow-hidden relative flex flex-col justify-center px-4 gap-3 group-hover:border-atlas-blue/40 transition-colors duration-500">
+                            <div class="bg-white border border-zinc-200 p-3 rounded-lg shadow-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-zinc-800">Alerta de Gastos</div>
+                                    <div class="text-[10px] text-zinc-500">Orçamento de Lazer excedido.</div>
+                                </div>
+                            </div>
+                            <div class="bg-white border border-zinc-200 p-3 rounded-lg shadow-sm transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-300 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-atlas-lightGreen/30 flex items-center justify-center text-green-500">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold text-zinc-800">Meta Concluída</div>
+                                    <div class="text-[10px] text-zinc-500">Reserva 100% preenchida.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">5. Guia da Jornada</h3>
+                        <p class="text-zinc-600 text-sm">O relatório integrado final: diagnóstico executivo, prioridades e um Plano de Ação concreto. Gere em PDF como se tivesse saído de uma reunião de consultoria.</p>
+                        <div class="h-40 bg-zinc-50 rounded-xl border border-zinc-200 mt-4 overflow-hidden relative flex items-center justify-center group-hover:border-atlas-blue/40 transition-colors duration-500">
+                            <div class="flex flex-col items-center">
+                                <div class="w-16 h-20 bg-white border-2 border-zinc-200 rounded-lg shadow-md flex flex-col items-center justify-center p-2 group-hover:border-atlas-blue group-hover:shadow-[0_0_20px_rgba(54,124,245,0.2)] transition-all duration-500 relative transform group-hover:-translate-y-2">
+                                    <div class="w-full flex justify-between px-1 mb-2">
+                                        <div class="w-2 h-0.5 bg-zinc-200 rounded"></div>
+                                        <div class="w-4 h-0.5 bg-zinc-200 rounded"></div>
+                                    </div>
+                                    <div class="w-8 h-8 rounded bg-atlas-blue/10 flex items-center justify-center text-atlas-blue mb-2">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                    <div class="h-1 w-8 bg-zinc-200 rounded"></div>
+                                    <div class="absolute -right-2 -bottom-2 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-300 scale-0 group-hover:scale-100">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Atlas Negócios [PRO] -->
+            <section class="feature-section" id="negocios" class="scroll-mt-32">
+                <div class="mb-8 flex items-center gap-3">
+                    <h2 class="text-3xl font-bold text-atlas-dark">Atlas Negócios</h2>
+                    <span class="bg-atlas-blue text-white text-xs font-bold px-2.5 py-1 rounded-md">PRO</span>
+                </div>
+                <p class="text-zinc-500 text-lg mb-8">Gestão poderosa para empreendedores. A sua vida pessoal e a da sua empresa finalmente separadas, mas conectadas.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Regras de Alocação</h3>
+                        <p class="text-zinc-600 text-sm">Defina quanto do que entra é pró-labore, quanto é distribuição de lucro e quanto fica no caixa da empresa de segurança.</p>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+                        <!-- PF / PJ Integration -->
+                        <div class="w-full border border-zinc-100 bg-zinc-50 h-32 rounded-xl mb-4 overflow-hidden flex items-center justify-center gap-6">
+                            <div class="flex flex-col items-center gap-2 group-hover:-translate-x-2 transition-transform duration-500">
+                                <div class="w-10 h-10 bg-atlas-lightBlue/20 rounded-full flex items-center justify-center text-atlas-blue border-2 border-white shadow-md font-bold text-xs">PF</div>
+                            </div>
+                            <div class="flex flex-col gap-1 items-center z-10 relative">
+                                <div class="w-6 h-6 bg-white border border-zinc-200 rounded-full flex items-center justify-center shadow-sm group-hover:rotate-180 transition-transform duration-700">
+                                    <svg class="w-3 h-3 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-center gap-2 group-hover:translate-x-2 transition-transform duration-500">
+                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-purple-600 border-2 border-white shadow-md font-bold text-xs">PJ</div>
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Histórico de Transferências</h3>
+                        <p class="text-zinc-600 text-sm">A ponte entre PJ e PF automatizada: o que sai da empresa entra no seu caixa pessoal categorizado, sem contar dinheiro dobrado.</p>
+                    </div>
+                    <div class="group bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow md:col-span-2">
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2">Ferramentas de Gestão Embutidas</h3>
+                        <ul class="text-sm text-zinc-600 list-disc list-inside mt-2 space-y-1">
+                            <li><strong>Multi-empresas suportado.</strong></li>
+                            <li><strong>Previsão de Caixa</strong> e Simulador de Fluxo.</li>
+                            <li><strong>Templates recorrentes</strong> para assinaturas e contabilidade.</li>
+                            <li><strong>Gestão de Clientes (CPF/CNPJ)</strong> controlando Receita Prevista vs Confirmada.</li>
+                            <li><strong>Score de Saúde da Empresa</strong> alimentando diretamente a sua nota pessoal!</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ecossistema de Educação -->
+            <section class="feature-section" id="educacao" class="scroll-mt-32">
+                <div class="mb-8 flex items-center gap-3">
+                    <h2 class="text-3xl font-bold text-atlas-dark">Ecossistema de Educação</h2>
+                    <span class="bg-amber-400 text-[#1A2E05] text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">Em breve</span>
+                </div>
+                <p class="text-zinc-500 text-lg mb-8">O mapa completo da sua jornada financeira. Tenha acesso a treinamentos profundos e práticos para dominar o seu dinheiro em cada estágio da vida.</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Manual do Dinheiro</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Plano da Liberdade</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Organização na Prática</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Planejamento Financeiro</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border border-zinc-200 z-20">Em breve</span>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Dominando o Variável</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border border-zinc-200 z-20">Em breve</span>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Renda Passiva com FIIs</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border border-zinc-200 z-20">Em breve</span>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Finanças do Casal</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border border-zinc-200 z-20">Em breve</span>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">Planejamento Tributário</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                    <div class="group relative bg-white p-6 rounded-2xl border border-zinc-200 shadow-sm hover:shadow-xl hover:border-atlas-blue/30 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col items-center text-center cursor-default">
+                        <div class="absolute inset-0 bg-gradient-to-b from-[#eff4ff]/0 to-[#eff4ff]/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div class="w-16 h-16 mb-4 bg-zinc-50 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-atlas-blue transition-all duration-500 shadow-inner group-hover:shadow-[0_0_20px_rgba(54,124,245,0.4)] relative z-10">
+                            <svg class="w-8 h-8 text-zinc-400 group-hover:text-white transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                        </div>
+                        <span class="absolute top-4 right-4 bg-zinc-100 text-zinc-500 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider border border-zinc-200 z-20">Em breve</span>
+                        <h3 class="text-lg font-bold text-atlas-dark mb-2 group-hover:text-atlas-blue transition-colors duration-500 relative z-10">O Novo Mapa do Dinheiro</h3>
+                        <div class="h-1 w-8 bg-zinc-200 rounded-full mt-2 group-hover:w-16 group-hover:bg-atlas-blue transition-all duration-500 relative z-10"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparação de Planos Premium -->
+    <style>
+        .pricing-section {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            border-radius: 24px;
+            box-shadow: 0 4px 40px rgba(0,0,0,0.03);
+            border: 1px solid #f0f0f0;
+        }
+        .pricing-card {
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+        }
+        .pricing-card:hover {
+            transform: scale(1.02) translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+            border-color: #e5e5e5;
+        }
+        .pricing-card.pro-card {
+            border: 2px solid #1C5E91;
+            box-shadow: 0 10px 30px -10px rgba(54,124,245,0.15);
+            position: relative;
+        }
+        .pricing-card.pro-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(54,124,245,0.4), rgba(54,124,245,0));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .pricing-card.pro-card:hover::before {
+            opacity: 1;
+        }
+        
+        .pricing-table-container {
+            border-radius: 20px;
+            border: 1px solid #f0f0f0;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .pricing-table {
+            width: 100%;
+            min-width: 800px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .pricing-table th {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            z-index: 10;
+            padding: 24px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            text-align: center;
+        }
+        .pricing-table th:first-child {
+            text-align: left;
+            padding-left: 32px;
+            z-index: 11;
+            left: 0;
+        }
+        
+        .pricing-table td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid #f5f5f5;
+            transition: background-color 0.2s ease;
+        }
+        .pricing-table td:first-child {
+            text-align: left;
+            padding-left: 32px;
+            font-weight: 500;
+            color: #4a4a4a;
+            position: sticky;
+            left: 0;
+            background: #ffffff;
+            z-index: 5;
+        }
+        
+        .pricing-table tr.category-row td {
+            background: #fcfcfc;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            padding-top: 32px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eaeaea;
+        }
+        .pricing-table tr.category-row td:first-child {
+            background: #fcfcfc;
+        }
+        
+        .pricing-table tr:not(.category-row):hover td {
+            background: #f9fafb;
+        }
+        .pricing-table tr:not(.category-row):hover td:first-child {
+            background: #f9fafb;
+        }
+        
+        @media (min-width: 768px) {
+        .check-pop {
+            display: inline-block;
+            transform: scale(0);
+            opacity: 0;
+        }
+        
+        .table-row-stagger {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        }
+        
+        .pro-col {
+            background: rgba(239, 244, 255, 0.3);
+        }
+        .pricing-table th.pro-col {
+            background: rgba(245, 248, 255, 0.95);
+        }
+        .pricing-table tr:not(.category-row):hover td.pro-col {
+            background: rgba(239, 244, 255, 0.6);
+        }
+        
+        .btn-manage {
+            background: #f5f5f5;
+            color: #1a1a1a;
+            border: 1px solid #e5e5e5;
+            transition: all 0.3s ease;
+        }
+        .btn-manage:hover {
+            background: #ffffff;
+            border-color: #d4d4d4;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
+
+    <section id="comparacao" class="pricing-section w-full py-20 px-4 relative mt-24 mb-16 max-w-6xl mx-auto scroll-mt-32">
+        <div class="container mx-auto">
+            
+            <!-- Header Pricing -->
+            <div class="flex flex-col items-center text-center gap-4 mb-20">
+                <h2 class="text-4xl md:text-5xl font-bold text-atlas-dark tracking-tight max-w-3xl">
+                    Comparação de Planos
+                </h2>
+                <p class="text-xl text-zinc-500 max-w-2xl">
+                    Escolha o plano ideal para o seu momento financeiro.
+                </p>
+            </div>
+
+            <!-- 3 Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto mb-16 relative z-10">
+                
+                <!-- Essencial -->
+                <div class="pricing-card p-8 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-dark mb-2">Atlas Essencial</h3>
+                        <p class="text-zinc-500 text-sm mb-8 min-h-[40px]">Controle financeiro e organização da vida financeira.</p>
+                        <div class="flex items-end gap-1 mb-8">
+                            <span class="text-4xl font-bold text-atlas-dark">R$ 15,90</span>
+                            <span class="text-zinc-500 font-medium mb-1">/mês</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro -->
+                <div class="pricing-card p-8 flex flex-col justify-between" style="transition-delay: 100ms;">
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-blue mb-2">Atlas Pro</h3>
+                        <p class="text-zinc-500 text-sm mb-8 min-h-[40px]">Planejamento financeiro completo + automações + Atlas Negócios + Mapa do Futuro.</p>
+                        <div class="flex items-end gap-1 mb-8">
+                            <span class="text-4xl font-bold text-atlas-dark">R$ 24,90</span>
+                            <span class="text-zinc-500 font-medium mb-1">/mês</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Elite -->
+                <div class="pricing-card pro-card p-8 flex flex-col justify-between" style="transition-delay: 200ms;">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-atlas-blue text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-sm uppercase tracking-wide whitespace-nowrap">
+                        Recomendado
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-atlas-dark mb-2">Atlas Elite</h3>
+                        <p class="text-zinc-500 text-sm mb-8 min-h-[40px]">Tudo do Pro + educação financeira premium e conteúdos exclusivos.</p>
+                        <div class="flex items-end gap-1 mb-6">
+                            <span class="text-4xl font-bold text-atlas-dark">R$ 32,90</span>
+                            <span class="text-zinc-500 font-medium mb-1">/mês</span>
+                        </div>
+                        <div class="bg-amber-50 text-amber-700 text-xs font-medium px-3 py-2 rounded-lg border border-amber-100/50">
+                            Inclui acesso ao Plano da Liberdade e conteúdos educacionais exclusivos.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <!-- Tabela Comparativa Moderna -->
+            <div class="w-full max-w-5xl mx-auto" id="pricing-table-wrapper">
+                <div class="pricing-table-container">
+                    <table class="pricing-table">
+                        <thead>
+                            <tr>
+                                <th>Funcionalidade</th>
+                                <th>Essencial</th>
+                                <th class="pro-col border-b-2 border-atlas-blue text-atlas-blue">Pro</th>
+                                <th>Elite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Controle Financeiro -->
+                            <tr class="category-row">
+                                <td colspan="4">Controle Financeiro</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Planejamento e Controle</td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Lançamentos</td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Calendário de Pagamentos</td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Análises</td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Assistente Atlas (IA)</td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Automação Financeira -->
+                            <tr class="category-row">
+                                <td colspan="4">Automação Financeira</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Fatura do Cartão</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Importar Extrato Bancário</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Importar OFX</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Importar Planilha</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Planejamento Estratégico -->
+                            <tr class="category-row">
+                                <td colspan="4">Planejamento Estratégico</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Planejamento de Vida</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Simulação de Objetivos</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Projeções Financeiras</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Planejamento de Aposentadoria</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Simulador de Decisão</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Simulador de Financiamento</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Planejamento de Futuro -->
+                            <tr class="category-row">
+                                <td colspan="4">Planejamento de Futuro</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Mapa do Futuro</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Vista da Montanha</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Eventos da Vida na linha do tempo</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Simulação de cenários patrimoniais</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Patrimônio e Investimentos -->
+                            <tr class="category-row">
+                                <td colspan="4">Patrimônio e Investimentos</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Controle Patrimonial</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Controle de Investimentos</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Evolução Patrimonial</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Proteção & Seguros</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Bens e Imóveis</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Renda Passiva com FIIs <span class="text-[10px] bg-zinc-100 text-zinc-500 px-1.5 py-0.5 rounded ml-2">EM BREVE</span></td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Atlas Negócios -->
+                            <tr class="category-row">
+                                <td colspan="4">Atlas Negócios</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Controle Financeiro Empresarial</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Fluxo de Caixa Empresarial</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Análise Financeira do Negócio</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Relatórios Inteligentes -->
+                            <tr class="category-row">
+                                <td colspan="4">Relatórios Inteligentes</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Relatório de Vida Financeira</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+
+                            <!-- Educação Financeira -->
+                            <tr class="category-row">
+                                <td colspan="4">Educação Financeira</td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Organização na Prática</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Manual do Dinheiro</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Planejamento Financeiro (curso)</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Plano da Liberdade</td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                            <tr class="table-row-stagger">
+                                <td>Conteúdos exclusivos <span class="text-[10px] bg-zinc-100 text-zinc-500 px-1.5 py-0.5 rounded ml-2">EM BREVE</span></td>
+                                <td><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td class="pro-col"><i data-lucide="x" class="w-5 h-5 text-zinc-300 mx-auto"></i></td>
+                                <td><i data-lucide="check" class="w-5 h-5 text-emerald-500 mx-auto check-pop"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- GSAP Animations for this section -->
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                        gsap.registerPlugin(ScrollTrigger);
+                        
+                        if (window.innerWidth >= 768) {
+                        // Animate rows
+                        const rows = document.querySelectorAll('.table-row-stagger');
+                        if (rows.length > 0) {
+                            gsap.to(rows, {
+                                scrollTrigger: {
+                                    trigger: "#pricing-table-wrapper",
+                                    start: "top 80%",
+                                },
+                                opacity: 1,
+                                y: 0,
+                                duration: 0.4,
+                                stagger: 0.03,
+                                ease: "power2.out"
+                            });
+                        }
+
+                        // Animate checks pop in
+                        const checks = document.querySelectorAll('.check-pop');
+                        if (checks.length > 0) {
+                            gsap.to(checks, {
+                                scrollTrigger: {
+                                    trigger: "#pricing-table-wrapper",
+                                    start: "top 70%",
+                                },
+                                scale: 1,
+                                opacity: 1,
+                                duration: 0.5,
+                                stagger: 0.01,
+                                ease: "back.out(1.7)",
+                                delay: 0.2
+                            });
+                        }
+                    }
+                    }
+                });
+            </script>
+
+        </div>
+    </section>
+
+        </main>
+    </div>
+
+    <!-- CTA Final -->
+    <section class="bg-[#0B1A30] text-white py-24 text-center mt-12 border-t border-[#1e293b]">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl md:text-5xl font-playfair font-normal italic mb-6">A maioria das pessoas falha por falta de clareza, não de dinheiro.</h2>
+            <p class="text-blue-100 text-lg mb-10">O Atlas te entrega o mapa completo.</p>
+            <a href="https://app.useatlasapp.com/auth" class="inline-flex items-center justify-center bg-atlas-red hover:bg-atlas-red/90 text-white font-bold py-4 px-10 rounded-xl transition-all shadow-[0_0_20px_rgba(54,124,245,0.4)] hover:shadow-[0_0_30px_rgba(54,124,245,0.6)]">
+                Assinar o Atlas
+            </a>
+        </div>
+    </section>
+
+    <footer class="w-full bg-atlas-blue py-16 px-6 relative z-20">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col items-center">
+                <!-- Logo -->
+                <div class="mb-10">
+                    <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas Logo" class="h-10 filter brightness-0 invert">
+                </div>
+                
+                <!-- Links -->
+                <nav class="mb-12 flex flex-wrap justify-center gap-6 lg:gap-10 text-white/90 font-medium text-sm md:text-base">
+                    <a href="/" class="hover:text-white transition-colors">Início</a>
+                    <a href="/#section-7" class="hover:text-white transition-colors">A Metodologia</a>
+                    <a href="/#section-8" class="hover:text-white transition-colors">Preços</a>
+                    <a href="funcionalidades.html" class="hover:text-white transition-colors">Funcionalidades</a>
+                    <a href="/#section-9" class="hover:text-white transition-colors">Dúvidas Frequentes</a>
+                <a href="suporte.html" class="hover:text-white transition-colors">Suporte</a>
+                </nav>
+
+                <!-- Copyright -->
+                <div class="text-center pt-4 md:pt-6 border-t border-white/20 w-full pb-2 md:pb-0">
+                    <p class="text-sm text-white/60">
+                        &copy; 2026 Atlas. Todos os direitos reservados.
+                    </p>
+                    <p class="text-xs text-white/50 mt-1">
+                        CNPJ: 59.816.277/0001-30
+                    </p>
+                </div>
+            
+        </div>
+    </footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Mobile Menu Toggle (Robust Version)
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const menuClose = document.getElementById('mobile-menu-close');
+        const menuOverlay = document.getElementById('mobile-menu-overlay');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        if(menuBtn && menuOverlay) {
+            menuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                menuOverlay.classList.remove('translate-y-[-100%]');
+                menuOverlay.classList.add('translate-y-0');
+                menuOverlay.style.transform = '';
+            });
+            menuClose.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                menuOverlay.classList.remove('translate-y-0');
+                menuOverlay.classList.add('translate-y-[-100%]');
+                menuOverlay.style.transform = '';
+            });
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuOverlay.classList.remove('translate-y-0');
+                    menuOverlay.classList.add('translate-y-[-100%]');
+                    menuOverlay.style.transform = '';
+                });
+            });
+        }
+    });
+</script>
+
+<!-- Menu Mobile Overlay -->
+<div id="mobile-menu-overlay" class="fixed inset-0 bg-atlas-blue z-[100] transform translate-y-[-100%] transition-transform duration-300 ease-in-out flex flex-col items-center justify-center">
+    <button id="mobile-menu-close" class="absolute top-6 right-6 text-white p-2">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+    <nav class="flex flex-col gap-6 text-white font-bold text-2xl text-center">
+        <a href="/#section-7" class="mobile-link">Sobre</a>
+        <a href="/#section-8" class="mobile-link">Preços</a>
+        <a href="funcionalidades.html" class="mobile-link">Funcionalidades</a>
+        <a href="/#section-9" class="mobile-link">FAQ</a>
+        <a href="suporte.html" class="mobile-link">Suporte</a>
+        <!-- CTA & Login -->
+        <div class="flex flex-col items-center gap-3 mt-2">
+            <a href="https://app.useatlasapp.com/auth" class="text-white/80 font-semibold text-base border border-white/30 px-8 py-3 rounded-full w-full text-center hover:bg-white/10 transition-colors">Entrar / Login</a>
+        </div>
+    </nav>
+</div>
+
+
+    <script>
+        let lastScroll = 0;
+        const header = document.getElementById('main-header');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll <= 0) {
+                header.style.transform = 'translateY(0)';
+                return;
+            }
+            
+            if (currentScroll > lastScroll && currentScroll > 80) {
+                // Scroll Down - hide header
+                header.style.transform = 'translateY(-150%)';
+            } else {
+                // Scroll Up - show header
+                header.style.transform = 'translateY(0)';
+            }
+            lastScroll = currentScroll;
+        });
+    </script>
+
+    <!-- Botão Flutuante de Assinatura -->
+    <div id="floating-cta" class="fixed bottom-6 lg:bottom-10 left-1/2 -translate-x-1/2 z-[90] transition-all duration-500 opacity-0 translate-y-10 pointer-events-none">
+        <a href="index.html#section-8" class="bg-atlas-red text-white hover:bg-atlas-red/90 shadow-[0_8px_32px_rgba(200,20,30,0.5)] py-3 px-8 rounded-full font-extrabold text-lg flex items-center justify-center gap-2 whitespace-nowrap pointer-events-auto border border-white/20 transition-transform hover:-translate-y-1 uppercase tracking-wide">
+            <img src="https://github.com/legendragon03453-dot/atlas/blob/main/export_2026-06-04T03_26_23-606Z/Group%201_1x.webp?raw=true" alt="Atlas" class="h-5 filter brightness-0 invert opacity-90 mt-[2px]">
+            Assinar Atlas
+        </a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingBtn = document.getElementById('floating-cta');
+            
+            window.addEventListener('scroll', () => {
+                if (!floatingBtn) return;
+                const scrollY = window.scrollY;
+                
+                // Mostra o botão depois de rolar a página (passando do topo)
+                let shouldShow = scrollY > 200;
+                
+                // Oculta se o footer estiver na tela para não colidir
+                const footerEl = document.querySelector('footer');
+                if (footerEl) {
+                    const footerRect = footerEl.getBoundingClientRect();
+                    if (footerRect.top < window.innerHeight) {
+                        shouldShow = false;
+                    }
+                }
+                
+                if (shouldShow) {
+                    floatingBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    floatingBtn.classList.add('opacity-100', 'translate-y-0');
+                } else {
+                    floatingBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                    floatingBtn.classList.remove('opacity-100', 'translate-y-0');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
